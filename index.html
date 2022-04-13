@@ -128,8 +128,11 @@
     var keywordList;
     var countryListArray;
     var dateArray = [];
+    var currentData = '';
+    var initialValue = [];
     $(window).on('load', function () {
-        var initialValue = ajaxCall('https://transpanda.news/tpapi/rss_getinitvalues.cfm');
+         initialValue = ajaxCall('https://transpanda.news/tpapi/rss_getinitvalues.cfm');
+         console.log(initialValue)
         if (initialValue.length > 0){
             var globalContent = ajaxCall(`https://transpanda.news/tpapi/rss_getcontent.cfm?date=${initialValue[0][1]}&keyword=${initialValue[1][1]}&countrycode1=${initialValue[4][1]}&countrycode2=${initialValue[2][1]}&from=1&to=50`);
             if (globalContent.length > 0) {
@@ -168,71 +171,77 @@
         }else{
             $("#datepicker").datepicker();
         }
-
-
-        // var dateList = ajaxCall('https://transpanda.news/tpapi/rss_getdates.cfm');
-        // if (dateList.length > 0) {
-        //     var dateHtml = '';
-        //     $.each(dateList, function (key, val) {
-        //         dateHtml += `<option value="${val[0]}">${val[0]}</option>`;
-        //     });
-        //     $('#date-select').html(dateHtml);
-        // }
-        // var countryList = ajaxCall('https://transpanda.news/tpapi/rss_getcountries.cfm');
-        // if (countryList.length > 0) {
-        //     var countryHtml = '';
-        //     $.each(countryList, function (key, val) {
-        //         countryHtml += `<option value="${val[1]}">${val[0]}</option>`;
-        //     });
-        //     $('.selectpicker').html(countryHtml);
-        //     $('.selectpicker').selectpicker('refresh');
-        // }
-        // countryListArray = [];
-        // $(".selectpicker:first-child option").each(function (key, val) {
-        //     countryListArray.push($(this).attr('value'))
-        // });
-        //
-        // keywordList = ajaxCall(`https://transpanda.news/tpapi/rss_getkeywords.cfm?date=${$('#date-select').val()}&countries=${countryListArray.toString()}`);
-        // if (keywordList.length > 0) {
-        //     updateKeywordList(keywordList)
-        // }
-        //
-        // var globalContent = ajaxCall(`https://transpanda.news/tpapi/rss_getglobalcontent.cfm?date=${$('#date-select').val()}&keyword=${keywordList.toString()}&from=1&to=50&countries=${countryListArray.toString()}`);
-        // if (globalContent.length > 0) {
-        //     var contentHtmlLeft = '';
-        //     var contentHtmlRight = '';
-        //     $.each(globalContent, function (key, val) {
-        //         contentHtmlLeft += getCardLeft(val);
-        //         contentHtmlRight += getCardRight(val);
-        //     });
-        //     $('.home-section-3-4').html(contentHtmlLeft);
-        //     $('.home-section-3-3').html(contentHtmlRight);
-        // }
-        // //Swal.hideLoading();
-        // Swal.close()
+        var countryList = ajaxCall('https://transpanda.news/tpapi/rss_getcountries.cfm');
+        if (countryList.length > 0) {
+            var countryHtml = '';
+            $.each(countryList, function (key, val) {
+                countryHtml += `<option value="${val[1]}">${val[0]}</option>`;
+            });
+            $('.selectpicker').html(countryHtml);
+            $('.selectpicker').selectpicker('refresh');
+        }
     });
     $(document).ready(function () {
-
-
-        $(document).on('change', '#date-select', function () {
+        $(document).on('change', '#datepicker', function () {
             //SwalInit();
-            $(".selectpicker").val('default');
-            $('.selectpicker').selectpicker('refresh');
-            keywordList = ajaxCall(`https://transpanda.news/tpapi/rss_getkeywords.cfm?date=${$(this).val()}&countries=${countryListArray.toString()}`);
-            if (keywordList.length > 0) {
-                updateKeywordList(keywordList);
+            currentData = $(this).val().replaceAll('/','-');
+            var contentUrl = `https://transpanda.news/tpapi/rss_getcontent.cfm?date=${currentData}`;
+            if ($('.btn-check:checked').length > 0) {
+                var newKeyword = [];
+                $('.btn-check').each(function () {
+                    if (this.checked) {
+                        newKeyword.push($(this).val())
+                    }
+                });
+                contentUrl += `&keyword=${newKeyword.toString()}`;
+            } else {
+                contentUrl += `&keyword=${initialValue[1][1]}`;
             }
-            var globalContent = ajaxCall(`https://transpanda.news/tpapi/rss_getglobalcontent.cfm?date=${$(this).val()}&keyword=${keywordList.toString()}&from=1&to=50&countries=${countryListArray.toString()}`);
+            var keywordUrl = `https://transpanda.news/tpapi/rss_getkeywords.cfm?date=${currentData}`;
+            var allCountryKeyword = '';
+            $('.selectpicker').each(function (){
+                if ($(this).data('side') == 'left'){
+                    if ($(this).val().length > 0){
+                        contentUrl +=`&countrycode1=${$(this).val().toString()}`;
+                        allCountryKeyword +=`${$(this).val().toString()}`;
+                    }else{
+                        contentUrl +=`&countrycode1=${initialValue[4][1]}`;
+                        allCountryKeyword +=`${initialValue[4][1]}`;
+                    }
+                }else{
+                    allCountryKeyword +=',';
+                    if ($(this).val().length > 0){
+                        contentUrl +=`&countrycode2=${$(this).val().toString()}`;
+                        allCountryKeyword +=`${$(this).val().toString()}`;
+                    }else{
+                        contentUrl +=`&countrycode2=${initialValue[2][1]}`;
+                        allCountryKeyword +=`${initialValue[2][1]}`;
+                    }
+                }
+            });
+            keywordUrl +=`&countries=${allCountryKeyword}`;
+            contentUrl +=`&from=1&to=50`;
+
+            var globalContent = ajaxCall(contentUrl);
             if (globalContent.length > 0) {
                 var contentHtmlLeft = '';
                 var contentHtmlRight = '';
                 $.each(globalContent, function (key, val) {
-                    contentHtmlLeft += getCardLeft(val);
-                    contentHtmlRight += getCardRight(val);
+                    if (val[12] == 'L'){
+                        contentHtmlLeft += getCardLeft(val);
+                    }else{
+                        contentHtmlRight += getCardRight(val);
+                    }
                 });
                 $('.home-section-3-4').html(contentHtmlLeft);
                 $('.home-section-3-3').html(contentHtmlRight);
             }
+
+            keywordList = ajaxCall(keywordUrl);
+            if (keywordList.length > 0) {
+                updateKeywordList(keywordList);
+            }
+
         })
         $(document).on('change', '.btn-check', function () {
             $(".selectpicker").val('default');
