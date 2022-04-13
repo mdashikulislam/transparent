@@ -1,0 +1,148 @@
+@media only screen and (max-width: 767px) {
+    .navbar-brand {
+        margin-left: 0;
+    }
+    .Who-are-we-menu {
+        margin-right: 0;
+    }
+    li.nav-item.search-icon-menu {
+        display: none;
+    }
+    li.nav-item.lng-menu {
+        display: none;
+    }
+    .donation-menu {
+        width: auto;
+        padding: 3px 27px;
+    }
+    .home-section-2-1 h6 {
+        margin-top: 20px;
+    }
+    .timeline:before{
+        display: none;
+    }
+    .timeline-badge {
+        display: none;
+    }
+    .timeline-left-side-1 {
+        width: 90%;
+        margin-bottom: 30px;
+    }
+    .timeline-right-side-1 {
+        width: 90%;
+    }
+    .header-date-1 {
+        margin-top: 15px;
+        margin-bottom: 15px;
+    }
+    .header-date-1 {
+        margin-left: 0;
+        margin-right: 0;
+        width: 100%;
+    }
+    .home-section-3-2 {
+        height: auto;
+    }
+    .navbar-brand img {
+        height: 55px;
+    }
+    button.navbar-toggler {
+        padding-left: 0;
+        padding-right: 0;
+    }
+    .check-global-section-1 .timeline-left-side-1 {
+        margin-bottom: 0;
+    }
+    .timeline-heading-sub-1 a {
+        padding: 8px 10px;
+        font-size: 13px;
+    }
+    .home-section-3-3 {
+        padding-left: 65px !important;
+        padding-right: 0;
+    }
+    .home-section-3-4 {
+        padding-left: 15px;
+        padding-right: 50px;
+    }
+}
+
+@media only screen and (min-width: 250px) and (max-width: 479px) {
+    .timeline-heading {
+        display: block;
+    }
+    .timeline-heading h4 {
+        margin-right: 0;
+        font-size: 18px;
+    }
+    .timeline-heading img {
+        margin: 8px 0;
+    }
+    .timeline-heading-sub-1 button {
+        padding: 8px 7px;
+        font-size: 14px;
+    }
+    .timeline-heading-sub-1 h3 {
+        font-size: 15px;
+    }
+    .header-date-1 {
+        width: 38%;
+    }
+}
+
+@media only screen and (min-width: 480px) and (max-width: 767px) {
+    .timeline-heading h4 {
+        font-size: 14px;
+    }
+    .header-date-1 input {
+        width: 160px;
+    }
+    .header-date-1 {
+        width: 38%;
+    }
+}
+
+@media only screen and (min-width: 768px) and (max-width: 1023px) {
+    .Who-are-we-menu {
+        margin-right: 12px;
+    }
+    .donation-menu {
+        width: 81px;
+    }
+    .donation-menu a {
+        font-size: 10px;
+    }
+    .header-date-1 {
+        width: auto;
+        margin-left: 0;
+    }
+    .Who-are-we-menu a {
+        font-size: 15px;
+    }
+    .timeline-heading h4 {
+        font-size: 15px;
+    }
+    .timeline-heading-sub-1 button {
+        padding: 8px 18px;
+    }
+}
+
+@media only screen and (min-width: 1024px) and (max-width: 1279px) {
+    .header-date-1 {
+        width: 33%;
+        margin-left: 0;
+    }
+    .Who-are-we-menu {
+        margin-right: 22px;
+    }
+}
+
+@media only screen and (min-width: 1280px) and (max-width: 1560px) {
+    .header-date-1 {
+        width: 27%;
+        margin-left: 224px;
+    }
+    .Who-are-we-menu {
+        margin-right: 22px;
+    }
+}
