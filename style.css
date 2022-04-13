@@ -542,3 +542,6 @@ ul.home-section-1-sub-1  li{
   outline: none;
   box-shadow: none;
 }
+.home-section-3-2{
+  height: 100vh!important;
+}

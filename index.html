@@ -21,7 +21,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
           rel="stylesheet">
     <link rel="stylesheet" href="assets/dist/css/sweetalert2.css">
-    <link rel="stylesheet" type="text/css" href="assets/dist/css/daterangepicker.css"/>
+<!--    <link rel="stylesheet" type="text/css" href="assets/dist/css/daterangepicker.css"/>-->
+    <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
+    <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
 </head>
 <body>
 <main>
@@ -29,9 +31,7 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html"><img src="assets/images/Logo.png" alt=""></a>
             <div class="header-date-1">
-                <select name="" id="date-select" class="form-control">
-
-                </select>
+                <input type="text" class="form-control" id="datepicker">
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample03"
                     aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
@@ -129,50 +129,89 @@
     var countryListArray;
     $(window).on('load', function () {
 
-
-
-        var dateList = ajaxCall('https://transpanda.news/tpapi/rss_getdates.cfm');
-        if (dateList.length > 0) {
-            var dateHtml = '';
-            $.each(dateList, function (key, val) {
-                dateHtml += `<option value="${val[0]}">${val[0]}</option>`;
-            });
-            $('#date-select').html(dateHtml);
+        var initialValue = ajaxCall('https://transpanda.news/tpapi/rss_getinitvalues.cfm');
+        if (initialValue.length > 0){
+            var globalContent = ajaxCall(`https://transpanda.news/tpapi/rss_getcontent.cfm?date=${initialValue[0][1]}&keyword=${initialValue[1][1]}&countrycode1=${initialValue[4][1]}&countrycode2=${initialValue[2][1]}&from=1&to=50`);
+            if (globalContent.length > 0) {
+                var contentHtmlLeft = '';
+                var contentHtmlRight = '';
+                $.each(globalContent, function (key, val) {
+                    if (val[12] == 'L'){
+                        contentHtmlLeft += getCardLeft(val);
+                    }else{
+                        contentHtmlRight += getCardRight(val);
+                    }
+                });
+                $('.home-section-3-4').html(contentHtmlLeft);
+                $('.home-section-3-3').html(contentHtmlRight);
+            }
         }
-        var countryList = ajaxCall('https://transpanda.news/tpapi/rss_getcountries.cfm');
-        if (countryList.length > 0) {
-            var countryHtml = '';
-            $.each(countryList, function (key, val) {
-                countryHtml += `<option value="${val[1]}">${val[0]}</option>`;
-            });
-            $('.selectpicker').html(countryHtml);
-            $('.selectpicker').selectpicker('refresh');
-        }
-        countryListArray = [];
-        $(".selectpicker:first-child option").each(function (key, val) {
-            countryListArray.push($(this).attr('value'))
-        });
+        Swal.close();
+        keywordList = ajaxCall(`https://transpanda.news/tpapi/rss_getkeywords.cfm?date=${initialValue[0][1]}&countries=${[initialValue[4][1],initialValue[2][1]].toString()}`);
 
-        keywordList = ajaxCall(`https://transpanda.news/tpapi/rss_getkeywords.cfm?date=${$('#date-select').val()}&countries=${countryListArray.toString()}`);
         if (keywordList.length > 0) {
             updateKeywordList(keywordList)
         }
 
-        var globalContent = ajaxCall(`https://transpanda.news/tpapi/rss_getglobalcontent.cfm?date=${$('#date-select').val()}&keyword=${keywordList.toString()}&from=1&to=50&countries=${countryListArray.toString()}`);
-        if (globalContent.length > 0) {
-            var contentHtmlLeft = '';
-            var contentHtmlRight = '';
-            $.each(globalContent, function (key, val) {
-                contentHtmlLeft += getCardLeft(val);
-                contentHtmlRight += getCardRight(val);
-            });
-            $('.home-section-3-4').html(contentHtmlLeft);
-            $('.home-section-3-3').html(contentHtmlRight);
-        }
-        //Swal.hideLoading();
-        Swal.close()
+
+
+
+
+        // var dateList = ajaxCall('https://transpanda.news/tpapi/rss_getdates.cfm');
+        // if (dateList.length > 0) {
+        //     var dateHtml = '';
+        //     $.each(dateList, function (key, val) {
+        //         dateHtml += `<option value="${val[0]}">${val[0]}</option>`;
+        //     });
+        //     $('#date-select').html(dateHtml);
+        // }
+        // var countryList = ajaxCall('https://transpanda.news/tpapi/rss_getcountries.cfm');
+        // if (countryList.length > 0) {
+        //     var countryHtml = '';
+        //     $.each(countryList, function (key, val) {
+        //         countryHtml += `<option value="${val[1]}">${val[0]}</option>`;
+        //     });
+        //     $('.selectpicker').html(countryHtml);
+        //     $('.selectpicker').selectpicker('refresh');
+        // }
+        // countryListArray = [];
+        // $(".selectpicker:first-child option").each(function (key, val) {
+        //     countryListArray.push($(this).attr('value'))
+        // });
+        //
+        // keywordList = ajaxCall(`https://transpanda.news/tpapi/rss_getkeywords.cfm?date=${$('#date-select').val()}&countries=${countryListArray.toString()}`);
+        // if (keywordList.length > 0) {
+        //     updateKeywordList(keywordList)
+        // }
+        //
+        // var globalContent = ajaxCall(`https://transpanda.news/tpapi/rss_getglobalcontent.cfm?date=${$('#date-select').val()}&keyword=${keywordList.toString()}&from=1&to=50&countries=${countryListArray.toString()}`);
+        // if (globalContent.length > 0) {
+        //     var contentHtmlLeft = '';
+        //     var contentHtmlRight = '';
+        //     $.each(globalContent, function (key, val) {
+        //         contentHtmlLeft += getCardLeft(val);
+        //         contentHtmlRight += getCardRight(val);
+        //     });
+        //     $('.home-section-3-4').html(contentHtmlLeft);
+        //     $('.home-section-3-3').html(contentHtmlRight);
+        // }
+        // //Swal.hideLoading();
+        // Swal.close()
     });
     $(document).ready(function () {
+        var date_range = ["11-04-2022", "12-04-2022"];
+        $( "#datepicker" ).datepicker({
+            beforeShowDay: function(date) {
+                var dateList = `${date.getDate()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${date.getFullYear()}`;
+                console.log(dateList)
+                if ($.inArray(dateList,date_range) !=-1) {
+                    return [true, ''];
+                }
+                return [false, ''];
+            }
+        });
+
+
         $(document).on('change', '#date-select', function () {
             //SwalInit();
             $(".selectpicker").val('default');
@@ -265,29 +304,21 @@
     }
 
     function getCardLeft(data) {
-        var color = '';
-        if (data[11] == 'yellow') {
-            color = 'yellow-icon-1';
-        } else if (data[11] == 'red') {
-            color = 'red-icon-1';
-        } else if (data[11] == 'green') {
-            color = 'green-icon-1';
-        }
         return `<div class="timeline-left-side-1">
                                     <div class="timeline-heading">
                                         <h4 class="timeline-title">${data[0]}</h4>
-                                        <p>${data[8]}</p>
+                                        <p>${data[7]}</p>
                                         <img class="ms-auto" src="assets/images/f1.png" alt="">
                                     </div>
                                     <div class="timeline-body">
                                         <p>${data[1]}</p>
-                                        <h5>${data[9]}</h5>
+                                        <h5>${data[8]}</h5>
                                         <h5>${moment(data[4]).fromNow()}</h5>
                                     </div>
                                     <div class="timeline-heading-sub-1">
                                         <a href="check-global.html">Check global</a>
                                         <p class="share-icon-1"><a href="${data[3]}" target="_blank"><i class="bi bi-share-fill"></i></a></p>
-                                        <h3 class="ms-auto"><i class="bi bi-circle-fill " style="color: ${data[11]}"></i>WPFI: ${data[10]}</h3>
+                                        <h3 class="ms-auto"><i class="bi bi-circle-fill " style="color: ${data[10]}"></i>WPFI: ${data[9]}</h3>
                                     </div>
                                 </div>`;
     }
@@ -317,18 +348,18 @@
         return `<div class="timeline-right-side-1">
                                     <div class="timeline-heading">
                                         <h4 class="timeline-title">${data[0]}</h4>
-                                        <p>${data[8]}</p>
+                                        <p>${data[7]}</p>
                                         <img class="ms-auto" src="assets/images/f1.png" alt="">
                                     </div>
                                     <div class="timeline-body">
                                         <p>${data[1]}</p>
-                                        <h5>${data[9]}</h5>
+                                        <h5>${data[8]}</h5>
                                         <h5>${moment(data[4]).fromNow()}</h5>
                                     </div>
                                     <div class="timeline-heading-sub-1">
                                         <a href="check-global.html">Check global</a>
                                         <p class="share-icon-1"><a href="${data[3]}" target="_blank"><i class="bi bi-share-fill"></i></a></p>
-                                        <h3 class="ms-auto"><i class="bi bi-circle-fill ${color}"></i>WPFI: ${data[10]}</h3>
+                                        <h3 class="ms-auto"><i class="bi bi-circle-fill " style="color: ${data[10]}"></i>WPFI: ${data[9]}</h3>
                                     </div>
                                 </div>`;
     }
