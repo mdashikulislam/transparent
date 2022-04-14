@@ -79,7 +79,7 @@
             <div class="row">
                 <div class="col-md-6 home-section-2-1">
                     <h6>Country</h6>
-                    <select data-side="left" class="selectpicker" multiple aria-label="Default select example"
+                    <select data-side="left"  class="selectpicker" multiple aria-label="Default select example"
                             data-live-search="true">
 
                     </select>
@@ -130,6 +130,7 @@
     var dateArray = [];
     var currentData = '';
     var initialValue = [];
+
     $(window).on('load', function () {
          initialValue = ajaxCall('https://transpanda.news/tpapi/rss_getinitvalues.cfm');
         currentData = initialValue[0][1].replaceAll('.','-');
