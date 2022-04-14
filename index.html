@@ -289,7 +289,7 @@
             }
         });
         $(document).on('change', '.selectpicker', function () {
-            var contentUrl = `https://transpanda.news/tpapi/rss_getglobalcontent.cfm?date=${$('#date-select').val()}`;
+            var contentUrl = `https://transpanda.news/tpapi/rss_getcontent.cfm?date=${currentData}`;
             if ($('.btn-check:checked').length > 0) {
                 var newKeyword = [];
                 $('.btn-check').each(function () {
@@ -299,26 +299,38 @@
                 });
                 contentUrl += `&keyword=${newKeyword.toString()}`;
             } else {
-                contentUrl += `&keyword=${keywordList.toString()}`;
+                contentUrl += `&keyword=${initialValue[1][1]}`;
             }
-            if ($(this).val().length > 0) {
-                contentUrl += `&from=1&to=50&countries=${$(this).val().toString()}`;
-            } else {
-                contentUrl += `&from=1&to=50&countries=${countryListArray.toString()}`;
-            }
+            $('.selectpicker').each(function (){
+                if ($(this).data('side') == 'left'){
+                    if ($(this).val().length > 0){
+                        contentUrl +=`&countrycode1=${$(this).val().toString()}`;
+                    }else{
+                        contentUrl +=`&countrycode1=${initialValue[4][1]}`;
+                    }
+                }else{
+                    if ($(this).val().length > 0){
+                        contentUrl +=`&countrycode2=${$(this).val().toString()}`;
+                    }else{
+                        contentUrl +=`&countrycode2=${initialValue[2][1]}`;
+                    }
+                }
+            });
+            contentUrl +=`&from=1&to=50`;
+
             var globalContent = ajaxCall(contentUrl);
             if (globalContent.length > 0) {
                 var contentHtmlLeft = '';
                 var contentHtmlRight = '';
                 $.each(globalContent, function (key, val) {
-                    contentHtmlLeft += getCardLeft(val);
-                    contentHtmlRight += getCardRight(val);
+                    if (val[12] == 'L'){
+                        contentHtmlLeft += getCardLeft(val);
+                    }else{
+                        contentHtmlRight += getCardRight(val);
+                    }
                 });
-                if ($(this).data('side') == 'left') {
-                    $('.home-section-3-4').html(contentHtmlLeft);
-                } else {
-                    $('.home-section-3-3').html(contentHtmlRight);
-                }
+                $('.home-section-3-4').html(contentHtmlLeft);
+                $('.home-section-3-3').html(contentHtmlRight);
             }
         })
     })
