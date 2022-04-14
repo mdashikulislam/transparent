@@ -526,9 +526,16 @@ h1, h2, h3, h4, h5, h6, p{
   text-align: end;
 }
 ul.home-section-1-sub-1  li{
-  padding: 0!important;
-  box-shadow:none!important;
-  border:0!important;
+  /*padding: 0!important;*/
+  /*box-shadow:none!important;*/
+  /*border:0!important;*/
+}
+ul.home-section-1-sub-1  li.active{
+  background: #d5392c!important;
+  border-color: #d5392c!important;
+}
+ul.home-section-1-sub-1  li.active span{
+  color: #fff!important;
 }
 .btn-check:active+.btn-outline-secondary:focus,
 .btn-check:checked+.btn-outline-secondary:focus,

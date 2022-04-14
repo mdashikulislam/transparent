@@ -187,11 +187,11 @@
             //SwalInit();
             currentData = $(this).val().replaceAll('/','-');
             var contentUrl = `https://transpanda.news/tpapi/rss_getcontent.cfm?date=${currentData}`;
-            if ($('.btn-check:checked').length > 0) {
+            if ($('.key-class.active').length > 0) {
                 var newKeyword = [];
-                $('.btn-check').each(function () {
-                    if (this.checked) {
-                        newKeyword.push($(this).val())
+                $('.key-class').each(function () {
+                    if ($(this).hasClass('active')) {
+                        newKeyword.push($(this).data('value'))
                     }
                 });
                 contentUrl += `&keyword=${newKeyword.toString()}`;
@@ -243,13 +243,14 @@
                 updateKeywordList(keywordList);
             }
         })
-        $(document).on('change', '.btn-check', function () {
+        $(document).on('click', '.key-class', function () {
+            $(this).toggleClass('active');
             var contentUrl = `https://transpanda.news/tpapi/rss_getcontent.cfm?date=${currentData}`;
-            if ($('.btn-check:checked').length > 0) {
+            if ($('.key-class.active').length > 0) {
                 var newKeyword = [];
-                $('.btn-check').each(function () {
-                    if (this.checked) {
-                        newKeyword.push($(this).val())
+                $('.key-class').each(function () {
+                    if ($(this).hasClass('active')) {
+                        newKeyword.push($(this).data('value'))
                     }
                 });
                 contentUrl += `&keyword=${newKeyword.toString()}`;
@@ -290,11 +291,11 @@
         });
         $(document).on('change', '.selectpicker', function () {
             var contentUrl = `https://transpanda.news/tpapi/rss_getcontent.cfm?date=${currentData}`;
-            if ($('.btn-check:checked').length > 0) {
+            if ($('.key-class.active').length > 0) {
                 var newKeyword = [];
-                $('.btn-check').each(function () {
-                    if (this.checked) {
-                        newKeyword.push($(this).val())
+                $('.key-class').each(function () {
+                    if ($(this).hasClass('active')) {
+                        newKeyword.push($(this).data('value'))
                     }
                 });
                 contentUrl += `&keyword=${newKeyword.toString()}`;
@@ -366,10 +367,10 @@
         var keywordListHtml = '';
         $.each(keywordList, function (key, val) {
             if (val[0] !== '') {
-                keywordListHtml += `<li>
-                                <input value="${val[0]}" type="checkbox" class="btn-check" id="btn-check-${key}"  autocomplete="off">
-                                <label class="btn btn-outline-secondary" for="btn-check-${key}">${val[0]}</label>
-                            </li>`;
+                keywordListHtml += `<li class="key-class" data-value="${val[0]}">
+                    <span>${val[0]}</span>
+                    <i class="bi bi-x-lg"></i>
+                  </li>`;
             }
         });
         $('#keyword-list').html(keywordListHtml);
