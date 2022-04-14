@@ -132,9 +132,9 @@
     var initialValue = [];
     $(window).on('load', function () {
          initialValue = ajaxCall('https://transpanda.news/tpapi/rss_getinitvalues.cfm');
-         console.log(initialValue)
+        currentData = initialValue[0][1].replaceAll('.','-');
         if (initialValue.length > 0){
-            var globalContent = ajaxCall(`https://transpanda.news/tpapi/rss_getcontent.cfm?date=${initialValue[0][1]}&keyword=${initialValue[1][1]}&countrycode1=${initialValue[4][1]}&countrycode2=${initialValue[2][1]}&from=1&to=50`);
+            var globalContent = ajaxCall(`https://transpanda.news/tpapi/rss_getcontent.cfm?date=${currentData}&keyword=${initialValue[1][1]}&countrycode1=${initialValue[4][1]}&countrycode2=${initialValue[2][1]}&from=1&to=50`);
             if (globalContent.length > 0) {
                 var contentHtmlLeft = '';
                 var contentHtmlRight = '';
@@ -150,7 +150,8 @@
             }
         }
         Swal.close();
-        keywordList = ajaxCall(`https://transpanda.news/tpapi/rss_getkeywords.cfm?date=${initialValue[0][1]}&countries=${[initialValue[4][1],initialValue[2][1]].toString()}`);
+
+        keywordList = ajaxCall(`https://transpanda.news/tpapi/rss_getkeywords.cfm?date=${currentData}&countries=${[initialValue[4][1],initialValue[2][1]].toString()}`);
         if (keywordList.length > 0) {
             updateKeywordList(keywordList)
         }
@@ -241,12 +242,9 @@
             if (keywordList.length > 0) {
                 updateKeywordList(keywordList);
             }
-
         })
         $(document).on('change', '.btn-check', function () {
-            $(".selectpicker").val('default');
-            $('.selectpicker').selectpicker('refresh');
-            var contentUrl = `https://transpanda.news/tpapi/rss_getglobalcontent.cfm?date=${$('#date-select').val()}`;
+            var contentUrl = `https://transpanda.news/tpapi/rss_getcontent.cfm?date=${currentData}`;
             if ($('.btn-check:checked').length > 0) {
                 var newKeyword = [];
                 $('.btn-check').each(function () {
@@ -256,16 +254,35 @@
                 });
                 contentUrl += `&keyword=${newKeyword.toString()}`;
             } else {
-                contentUrl += `&keyword=${keywordList.toString()}`;
+                contentUrl += `&keyword=${initialValue[1][1]}`;
             }
-            contentUrl += `&from=1&to=50&countries=${countryListArray.toString()}`;
+            $('.selectpicker').each(function (){
+                if ($(this).data('side') == 'left'){
+                    if ($(this).val().length > 0){
+                        contentUrl +=`&countrycode1=${$(this).val().toString()}`;
+                    }else{
+                        contentUrl +=`&countrycode1=${initialValue[4][1]}`;
+                    }
+                }else{
+                    if ($(this).val().length > 0){
+                        contentUrl +=`&countrycode2=${$(this).val().toString()}`;
+                    }else{
+                        contentUrl +=`&countrycode2=${initialValue[2][1]}`;
+                    }
+                }
+            });
+            contentUrl +=`&from=1&to=50`;
+
             var globalContent = ajaxCall(contentUrl);
             if (globalContent.length > 0) {
                 var contentHtmlLeft = '';
                 var contentHtmlRight = '';
                 $.each(globalContent, function (key, val) {
-                    contentHtmlLeft += getCardLeft(val);
-                    contentHtmlRight += getCardRight(val);
+                    if (val[12] == 'L'){
+                        contentHtmlLeft += getCardLeft(val);
+                    }else{
+                        contentHtmlRight += getCardRight(val);
+                    }
                 });
                 $('.home-section-3-4').html(contentHtmlLeft);
                 $('.home-section-3-3').html(contentHtmlRight);
