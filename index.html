@@ -24,6 +24,7 @@
 <!--    <link rel="stylesheet" type="text/css" href="assets/dist/css/daterangepicker.css"/>-->
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
+    <link href="https://transpanda.news/assets/css/flag-icon.css" rel="stylesheet">
 </head>
 <body>
 <main>
@@ -349,7 +350,9 @@
                                     <div class="timeline-heading">
                                         <h4 class="timeline-title">${data[0]}</h4>
                                         <p>${data[7]}</p>
-                                        <img class="ms-auto" src="assets/images/f1.png" alt="">
+                                        <div>
+                                            <span class="flag-icon flag-icon-${data[6]}"></span>
+                                        </div>
                                     </div>
                                     <div class="timeline-body">
                                         <p>${data[1]}</p>
@@ -390,7 +393,9 @@
                                     <div class="timeline-heading">
                                         <h4 class="timeline-title">${data[0]}</h4>
                                         <p>${data[7]}</p>
-                                        <img class="ms-auto" src="assets/images/f1.png" alt="">
+                                        <div>
+                                            <span class="flag-icon flag-icon-${data[6]}"></span>
+                                        </div>
                                     </div>
                                     <div class="timeline-body">
                                         <p>${data[1]}</p>

@@ -552,3 +552,8 @@ ul.home-section-1-sub-1  li.active span{
 .home-section-3-2{
   height: 100vh!important;
 }
+span.flag-icon{
+  width: 65px;
+  height: 43px;
+  display: block;
+}
