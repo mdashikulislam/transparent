@@ -33,8 +33,7 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html"><img src="assets/images/Logo.png" alt=""></a>
             <div class="header-date-1">
-                <input type="text" name="daterange" class="form-control" value="01/01/2022 - 01/15/2022"
-                       id="HeaderDate"/>
+                <input type="text" class="form-control" id="datepicker">
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample03"
                     aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
@@ -67,79 +66,8 @@
                         <i class="bi bi-caret-left"></i>
                     </button>
                 </div>
-                <ul class="home-section-1-sub-1">
-                    <li>
-                        <span>Russia</span>
-                        <i class="bi bi-x-lg"></i>
-                    </li>
-                    <li>
-                        <span>Ukraine</span>
-                        <i class="bi bi-x-lg"></i>
-                    </li>
-                    <li>
-                        <span>War</span>
-                        <i class="bi bi-x-lg"></i>
-                    </li>
-                    <li>
-                        <span>NATO</span>
-                        <i class="bi bi-x-lg"></i>
-                    </li>
-                    <li>
-                        <span>Putin</span>
-                        <i class="bi bi-x-lg"></i>
-                    </li>
-                    <li>
-                        <span>ATOM</span>
-                        <i class="bi bi-x-lg"></i>
-                    </li>
-                    <li>
-                        <span>Putin</span>
-                        <i class="bi bi-x-lg"></i>
-                    </li>
-                    <li>
-                        <span>Covid</span>
-                        <i class="bi bi-x-lg"></i>
-                    </li>
-                    <li>
-                        <span>Army</span>
-                        <i class="bi bi-x-lg"></i>
-                    </li>
-                    <li>
-                        <span>Russia</span>
-                        <i class="bi bi-x-lg"></i>
-                    </li>
-                    <li>
-                        <span>Ukraine</span>
-                        <i class="bi bi-x-lg"></i>
-                    </li>
-                    <li>
-                        <span>War</span>
-                        <i class="bi bi-x-lg"></i>
-                    </li>
-                    <li>
-                        <span>NATO</span>
-                        <i class="bi bi-x-lg"></i>
-                    </li>
-                    <li>
-                        <span>Putin</span>
-                        <i class="bi bi-x-lg"></i>
-                    </li>
-                    <li>
-                        <span>ATOM</span>
-                        <i class="bi bi-x-lg"></i>
-                    </li>
-                    <li>
-                        <span>Putin</span>
-                        <i class="bi bi-x-lg"></i>
-                    </li>
-                    <li>
-                        <span>Covid</span>
-                        <i class="bi bi-x-lg"></i>
-                    </li>
-                    <li>
-                        <span>Army</span>
-                        <i class="bi bi-x-lg"></i>
-                    </li>
+                <ul class="home-section-1-sub-1" id="keyword-list">
+
                 </ul>
                 <div class="home-section-1-right-arror ms-auto">
                     <button id="right-button">
@@ -163,10 +91,6 @@
                             <h6>Country</h6>
                             <select class="selectpicker" multiple aria-label="Default select example"
                                     data-live-search="true">
-                                <option value="Russia">Russia</option>
-                                <option value="Ukraine">Ukraine</option>
-                                <option value="Russia">Russia</option>
-                                <option value="Ukraine">Ukraine</option>
                             </select>
                         </div>
                         <div class="check-global-section-2">
@@ -250,14 +174,19 @@
     });
     Swal.showLoading();
     var header = [];
+    var dateArray = [];
+    var currentDate = '';
+    var url = '';
+    var keywordList = [];
+    var activeKeyword = '';
     $(window).on('load', function () {
-        var url = getUrlParameter('link');
+        url = getUrlParameter('link');
         if (url == '') {
             window.location.href = 'index.html';
         }
         header = ajaxCall(`https://transpanda.news/tpapi/rss_getcontentbylink.cfm?link=${url}`);
+        console.log(header)
         if (header.length > 0) {
-            console.log(header[0])
             var headerHtml = `<div class="timeline-left-side-1">
                 <div class="timeline-heading">
                   <h4 class="timeline-title">${header[0][0]}</h4>
@@ -271,21 +200,86 @@
                 <div class="timeline-body">
                   <p>${header[0][1]}</p>
                   <h5>${header[0][8]}</h5>
-                  <h5>${moment(header[0][4]).fromNow()}</h5>
+                  <h5>${moment(new Date(header[0][4])).fromNow()}</h5>
                 </div>
                 <div class="timeline-heading-sub-1">
                   <a data-link="${header[0][3]}" href="check-global.html?link=${header[0][3]}">Check global</a>
-                  <p class="share-icon-1"><i class="bi bi-share-fill"></i></p>
+                  <p class="share-icon-1"><a href="${header[0][3]}" target="_blank"><i class="bi bi-share-fill"></i></a></p>
                   <h3 class="ms-auto"><i class="bi bi-circle-fill" style="color: ${header[0][10]}"></i>WPFI: ${header[0][9]}</h3>
                 </div>
               </div>`;
             $('.check-global-section-3').html(headerHtml);
-
             Swal.close();
         } else {
             window.location.href = 'index.html';
         }
+        currentDate = getUrlParameter('date');
+        activeKeyword = getUrlParameter('keyword');
+        var contentUrl = `https://transpanda.news/tpapi/rss_getglobalcontent.cfm?date=${currentDate}&keyword=${activeKeyword}&countries=${header[0][5]},${header[0][6]}&fromlink=${url}&from=1&to=50`;
+        var globalContent = ajaxCall(contentUrl);
+        console.log(globalContent)
+        if (globalContent.length > 0) {
+            var contentHtmlLeft = '';
+            var contentHtmlRight = '';
+            $.each(globalContent, function (key, val) {
+                // if (val[12] == 'L'){
+                //     contentHtmlLeft += getCardLeft(val);
+                // }else{
+                //     contentHtmlRight += getCardRight(val);
+                // }
+            });
+            // $('.home-section-3-4').html(contentHtmlLeft);
+            // $('.home-section-3-3').html(contentHtmlRight);
+        }
+
+        var dateList = ajaxCall('https://transpanda.news/tpapi/rss_getdates.cfm');
+        if (dateList.length > 0) {
+            $.each(dateList, function (key, val) {
+                dateArray.push(val[0].replaceAll('.', '-'));
+            });
+            $("#datepicker").datepicker({
+                beforeShowDay: function (date) {
+                    var dateList = `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${("0" + (date.getDate())).slice(-2)}`;
+                    if ($.inArray(dateList, dateArray) !== -1) {
+                        return [true, ''];
+                    }
+                    return [false, ''];
+                }
+            });
+        } else {
+            $("#datepicker").datepicker();
+        }
+        keywordList = ajaxCall(`https://transpanda.news/tpapi/rss_getkeywords.cfm?date=${currentDate}&countries=${header[0][5]},${header[0][6]}`);
+        if (keywordList.length > 0) {
+            updateKeywordList(keywordList)
+        }
+        var countryList = ajaxCall('https://transpanda.news/tpapi/rss_getcountries.cfm');
+        if (countryList.length > 0) {
+            var countryHtml = '';
+            $.each(countryList, function (key, val) {
+                countryHtml += `<option value="${val[1]}">${val[0]}</option>`;
+            });
+            $('.selectpicker').html(countryHtml);
+            $('.selectpicker').selectpicker('refresh');
+        }
+
     })
+    $(document).ready(function () {
+
+    })
+
+    function updateKeywordList(keywordList) {
+        var keywordListHtml = '';
+        $.each(keywordList, function (key, val) {
+            if (val[0] !== '') {
+                keywordListHtml += `<li class="key-class" data-value="${val[0]}">
+                    <span>${val[0]}</span>
+                    <i class="bi bi-x-lg"></i>
+                  </li>`;
+            }
+        });
+        $('#keyword-list').html(keywordListHtml);
+    }
 
     function ajaxCall(url) {
         var data;

@@ -130,10 +130,11 @@
     var dateArray = [];
     var currentData = '';
     var initialValue = [];
-
+    var activeKeyword = '';
     $(window).on('load', function () {
-         initialValue = ajaxCall('https://transpanda.news/tpapi/rss_getinitvalues.cfm');
+        initialValue = ajaxCall('https://transpanda.news/tpapi/rss_getinitvalues.cfm');
         currentData = initialValue[0][1].replaceAll('.','-');
+        activeKeyword = initialValue[1][1];
         if (initialValue.length > 0){
             var globalContent = ajaxCall(`https://transpanda.news/tpapi/rss_getcontent.cfm?date=${currentData}&keyword=${initialValue[1][1]}&countrycode1=${initialValue[4][1]}&countrycode2=${initialValue[2][1]}&from=1&to=50`);
             if (globalContent.length > 0) {
@@ -151,7 +152,6 @@
             }
         }
         Swal.close();
-
         keywordList = ajaxCall(`https://transpanda.news/tpapi/rss_getkeywords.cfm?date=${currentData}&countries=${[initialValue[4][1],initialValue[2][1]].toString()}`);
         if (keywordList.length > 0) {
             updateKeywordList(keywordList)
@@ -255,8 +255,10 @@
                     }
                 });
                 contentUrl += `&keyword=${newKeyword.toString()}`;
+                activeKeyword = newKeyword.toString();
             } else {
                 contentUrl += `&keyword=${initialValue[1][1]}`;
+                activeKeyword = initialValue[1][1];
             }
             $('.selectpicker').each(function (){
                 if ($(this).data('side') == 'left'){
@@ -334,11 +336,6 @@
                 $('.home-section-3-3').html(contentHtmlRight);
             }
         })
-        $(document).on('click','.check-global',function (e){
-            e.preventDefault();
-            var link = $(this).data('link');
-            window.location.href = 'check-global.html?link='+link;
-        })
     })
 
     function SwalInit() {
@@ -361,10 +358,10 @@
                                     <div class="timeline-body">
                                         <p>${data[1]}</p>
                                         <h5>${data[8]}</h5>
-                                        <h5>${moment(data[4]).fromNow()}</h5>
+                                        <h5>${moment(new Date(data[4])).fromNow()}</h5>
                                     </div>
                                     <div class="timeline-heading-sub-1">
-                                        <a data-link="${data[3]}" class="check-global" href="javascript:void(0)">Check global</a>
+                                        <a  class="check-global" href="check-global.html?link=${data[3]}&date=${currentData}&keyword=${activeKeyword}">Check global</a>
                                         <p class="share-icon-1"><a href="${data[3]}" target="_blank"><i class="bi bi-share-fill"></i></a></p>
                                         <h3 class="ms-auto"><i class="bi bi-circle-fill " style="color: ${data[10]}"></i>WPFI: ${data[9]}</h3>
                                     </div>
@@ -382,10 +379,10 @@
                                     <div class="timeline-body">
                                         <p>${data[1]}</p>
                                         <h5>${data[8]}</h5>
-                                        <h5>${moment(data[4]).fromNow()}</h5>
+                                        <h5>${moment(new Date(data[4])).fromNow()}</h5>
                                     </div>
                                     <div class="timeline-heading-sub-1">
-                                        <a data-link="${data[3]}" class="check-global" href="javascript:void(0)">Check global</a>
+                                        <a  class="check-global" href="check-global.html?link=${data[3]}&date=${currentData}&keyword=${activeKeyword}">Check global</a>
                                         <p class="share-icon-1"><a href="${data[3]}" target="_blank"><i class="bi bi-share-fill"></i></a></p>
                                         <h3 class="ms-auto"><i class="bi bi-circle-fill " style="color: ${data[10]}"></i>WPFI: ${data[9]}</h3>
                                     </div>
