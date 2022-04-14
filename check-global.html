@@ -94,66 +94,6 @@
                             </select>
                         </div>
                         <div class="check-global-section-2">
-                            <div class="timeline-right-side-1">
-                                <div class="timeline-heading">
-                                    <h4 class="timeline-title">Twitter and Facebook will answer for fakes a</h4>
-                                    <div class="check-global-section-1-1 ms-auto">
-                                        <p>Russland</p>
-                                        <img src="assets/images/f2.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="timeline-body">
-                                    <p>Russian army not threatening civilians in Ukraine, defense ministry tells UN
-                                        chief …</p>
-                                    <h5>Interfax</h5>
-                                    <h5>3 hours ago</h5>
-                                </div>
-                                <div class="timeline-heading-sub-1">
-                                    <button>Check global</button>
-                                    <p class="share-icon-1"><i class="bi bi-share-fill"></i></p>
-                                    <h3 class="ms-auto"><i class="bi bi-circle-fill red-icon-1"></i>WPFI: 98</h3>
-                                </div>
-                            </div>
-                            <div class="timeline-right-side-1">
-                                <div class="timeline-heading">
-                                    <h4 class="timeline-title">Twitter and Facebook will answer for fakes a</h4>
-                                    <div class="check-global-section-1-1 ms-auto">
-                                        <p>Russland</p>
-                                        <img src="assets/images/f2.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="timeline-body">
-                                    <p>Russian army not threatening civilians in Ukraine, defense ministry tells UN
-                                        chief …</p>
-                                    <h5>Interfax</h5>
-                                    <h5>3 hours ago</h5>
-                                </div>
-                                <div class="timeline-heading-sub-1">
-                                    <button>Check global</button>
-                                    <p class="share-icon-1"><i class="bi bi-share-fill"></i></p>
-                                    <h3 class="ms-auto"><i class="bi bi-circle-fill red-icon-1"></i>WPFI: 98</h3>
-                                </div>
-                            </div>
-                            <div class="timeline-right-side-1">
-                                <div class="timeline-heading">
-                                    <h4 class="timeline-title">Twitter and Facebook will answer for fakes a</h4>
-                                    <div class="check-global-section-1-1 ms-auto">
-                                        <p>Russland</p>
-                                        <img src="assets/images/f2.png" alt="">
-                                    </div>
-                                </div>
-                                <div class="timeline-body">
-                                    <p>Russian army not threatening civilians in Ukraine, defense ministry tells UN
-                                        chief …</p>
-                                    <h5>Interfax</h5>
-                                    <h5>3 hours ago</h5>
-                                </div>
-                                <div class="timeline-heading-sub-1">
-                                    <button>Check global</button>
-                                    <p class="share-icon-1"><i class="bi bi-share-fill"></i></p>
-                                    <h3 class="ms-auto"><i class="bi bi-circle-fill red-icon-1"></i>WPFI: 98</h3>
-                                </div>
-                            </div>
                         </div>
                     </div>
                 </div>
@@ -185,7 +125,8 @@
             window.location.href = 'index.html';
         }
         header = ajaxCall(`https://transpanda.news/tpapi/rss_getcontentbylink.cfm?link=${url}`);
-        console.log(header)
+        currentDate = getUrlParameter('date');
+        activeKeyword = getUrlParameter('keyword');
         if (header.length > 0) {
             var headerHtml = `<div class="timeline-left-side-1">
                 <div class="timeline-heading">
@@ -203,7 +144,7 @@
                   <h5>${moment(new Date(header[0][4])).fromNow()}</h5>
                 </div>
                 <div class="timeline-heading-sub-1">
-                  <a data-link="${header[0][3]}" href="check-global.html?link=${header[0][3]}">Check global</a>
+                  <a  href="check-global.html?link=${header[0][3]}&date=${currentDate}&keyword=${activeKeyword}">Check global</a>
                   <p class="share-icon-1"><a href="${header[0][3]}" target="_blank"><i class="bi bi-share-fill"></i></a></p>
                   <h3 class="ms-auto"><i class="bi bi-circle-fill" style="color: ${header[0][10]}"></i>WPFI: ${header[0][9]}</h3>
                 </div>
@@ -213,23 +154,17 @@
         } else {
             window.location.href = 'index.html';
         }
-        currentDate = getUrlParameter('date');
-        activeKeyword = getUrlParameter('keyword');
+
         var contentUrl = `https://transpanda.news/tpapi/rss_getglobalcontent.cfm?date=${currentDate}&keyword=${activeKeyword}&countries=${header[0][5]},${header[0][6]}&fromlink=${url}&from=1&to=50`;
         var globalContent = ajaxCall(contentUrl);
         console.log(globalContent)
         if (globalContent.length > 0) {
-            var contentHtmlLeft = '';
-            var contentHtmlRight = '';
+            var contentHtml = '';
             $.each(globalContent, function (key, val) {
-                // if (val[12] == 'L'){
-                //     contentHtmlLeft += getCardLeft(val);
-                // }else{
-                //     contentHtmlRight += getCardRight(val);
-                // }
+                contentHtml +=contentCard(val);
             });
-            // $('.home-section-3-4').html(contentHtmlLeft);
-            // $('.home-section-3-3').html(contentHtmlRight);
+            console.log(contentHtml)
+             $('.check-global-section-2').html(contentHtml);
         }
 
         var dateList = ajaxCall('https://transpanda.news/tpapi/rss_getdates.cfm');
@@ -267,7 +202,29 @@
     $(document).ready(function () {
 
     })
-
+    function contentCard(data){
+        return `<div class="timeline-right-side-1">
+                <div class="timeline-heading">
+                  <h4 class="timeline-title">${data[0]}</h4>
+                  <div class="check-global-section-1-1 ms-auto">
+                    <p>${data[7]}</p>
+                    <div>
+                        <span style="border-radius: 50%;width: 55px;height: 55px" class="flag-icon flag-icon-${data[6]}"></span>
+                    </div>
+                  </div>
+                </div>
+                <div class="timeline-body">
+                  <p>${data[1]}</p>
+                  <h5>${data[8]}</h5>
+                  <h5>${moment(new Date(data[4])).fromNow()}</h5>
+                </div>
+                <div class="timeline-heading-sub-1">
+                  <a data-link="${data[3]}" href="check-global.html?link=${data[3]}&date=${currentDate}&keyword=${activeKeyword}">Check global</a>
+                  <p class="share-icon-1"><a href="${data[3]}" target="_blank"><i class="bi bi-share-fill"></i></a></p>
+                  <h3 class="ms-auto"><i class="bi bi-circle-fill" style="color: ${data[10]}"></i>WPFI: ${data[9]}</h3>
+                </div>
+              </div>`;
+    }
     function updateKeywordList(keywordList) {
         var keywordListHtml = '';
         $.each(keywordList, function (key, val) {
