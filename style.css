@@ -582,4 +582,7 @@ span.flag-icon{
   .share-icon-1{
     margin-left: 5px!important;
   }
+  .timeline-right-side-1{
+    width: 100%!important;
+  }
 }
