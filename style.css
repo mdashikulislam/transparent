@@ -557,3 +557,19 @@ span.flag-icon{
   height: 43px;
   display: block;
 }
+.large-screen{
+  display: none;
+}
+.mobile-screen{
+  display: none;
+}
+@media only screen and (min-width: 768px) {
+  .large-screen{
+    display: block;
+  }
+}
+@media only screen and (max-width: 767px) {
+  .mobile-screen{
+    display: block;
+  }
+}

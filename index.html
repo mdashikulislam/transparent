@@ -95,7 +95,7 @@
         </div>
     </section>
 
-    <section class="home-section-3">
+    <section class="home-section-3 large-screen">
         <div class="container">
             <div class="row">
                 <div class="col-md-12 home-section-3-1">
@@ -113,6 +113,21 @@
             </div>
         </div>
     </section>
+    <section class="home-section-3 mobile-screen">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 home-section-3-1">
+                    <div class="timeline row">
+                        <div class="col-md-6">
+                            <div class="home-section-3-2 home-section-3-4 home-section-mobile">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
 </main>
 <script src="assets/dist/js/sweetalert2.min.js"></script>
 <script type="text/javascript" src="assets/dist/js/moment.min.js"></script>
@@ -140,7 +155,9 @@
             if (globalContent.length > 0) {
                 var contentHtmlLeft = '';
                 var contentHtmlRight = '';
+                var mobileContent = '';
                 $.each(globalContent, function (key, val) {
+                    mobileContent +=getCardBoth(val,key);
                     if (val[12] == 'L'){
                         contentHtmlLeft += getCardLeft(val);
                     }else{
@@ -149,6 +166,7 @@
                 });
                 $('.home-section-3-4').html(contentHtmlLeft);
                 $('.home-section-3-3').html(contentHtmlRight);
+                $('.home-section-mobile').html(mobileContent);
             }
         }
         Swal.close();
@@ -345,7 +363,33 @@
         });
         Swal.showLoading();
     }
-
+    function getCardBoth(data,key) {
+        var side= 'left';
+        if ((key % 2)==0){
+             side= 'left';
+        }else{
+            side= 'right';
+        }
+        return `<div class="timeline-${side}-side-1">
+                                    <div class="timeline-heading">
+                                        <h4 class="timeline-title">${data[0]}</h4>
+                                        <p>${data[7]}</p>
+                                        <div>
+                                            <span class="flag-icon flag-icon-${data[6]}"></span>
+                                        </div>
+                                    </div>
+                                    <div class="timeline-body">
+                                        <p>${data[1]}</p>
+                                        <h5>${data[8]}</h5>
+                                        <h5>${moment(new Date(data[4])).fromNow()}</h5>
+                                    </div>
+                                    <div class="timeline-heading-sub-1">
+                                        <a  class="check-global" href="check-global.html?link=${data[3]}&date=${currentData}&keyword=${activeKeyword}">Check global</a>
+                                        <p class="share-icon-1"><a href="${data[3]}" target="_blank"><i class="bi bi-share-fill"></i></a></p>
+                                        <h3 class="ms-auto"><i class="bi bi-circle-fill " style="color: ${data[10]}"></i>WPFI: ${data[9]}</h3>
+                                    </div>
+                                </div>`;
+    }
     function getCardLeft(data) {
         return `<div class="timeline-left-side-1">
                                     <div class="timeline-heading">
