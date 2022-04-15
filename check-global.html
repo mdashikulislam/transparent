@@ -157,13 +157,11 @@
 
         var contentUrl = `https://transpanda.news/tpapi/rss_getglobalcontent.cfm?date=${currentDate}&keyword=${activeKeyword}&countries=${header[0][5]},${header[0][6]}&fromlink=${url}&from=1&to=50`;
         var globalContent = ajaxCall(contentUrl);
-        console.log(globalContent)
         if (globalContent.length > 0) {
             var contentHtml = '';
             $.each(globalContent, function (key, val) {
                 contentHtml +=contentCard(val);
             });
-            console.log(contentHtml)
              $('.check-global-section-2').html(contentHtml);
         }
 
@@ -200,7 +198,51 @@
 
     })
     $(document).ready(function () {
+        $(document).on('change', '#datepicker', function () {
+            //SwalInit();
+            currentData = $(this).val().replaceAll('/','-');
+            //var contentUrl = `https://transpanda.news/tpapi/rss_getcontent.cfm?date=${currentData}`;
+            var contentUrl = `https://transpanda.news/tpapi/rss_getglobalcontent.cfm?date=${currentData}`;
 
+            if ($('.key-class.active').length > 0) {
+                var newKeyword = [];
+                $('.key-class').each(function () {
+                    if ($(this).hasClass('active')) {
+                        newKeyword.push($(this).data('value'))
+                    }
+                });
+                contentUrl += `&keyword=${newKeyword.toString()}`;
+            } else {
+                contentUrl += `&keyword=${getUrlParameter('keyword')}`;
+            }
+            var keywordUrl = `https://transpanda.news/tpapi/rss_getkeywords.cfm?date=${currentData}`;
+            var allCountryKeyword = '';
+            $('.selectpicker').each(function (){
+                if ($(this).val().length > 0){
+                    contentUrl +=`&countries=${$(this).val().toString()}`;
+                    allCountryKeyword +=`${$(this).val().toString()}`;
+                }else{
+                    contentUrl +=`&countries=${header[0][5]},${header[0][6]}`;
+                    allCountryKeyword +=`${header[0][5]},${header[0][6]}`;
+                }
+            });
+            keywordUrl +=`&countries=${allCountryKeyword}`;
+            contentUrl +=`&fromlink=${url}&from=1&to=50`;
+
+            var globalContent = ajaxCall(contentUrl);
+            if (globalContent.length > 0) {
+                var contentHtml = '';
+                $.each(globalContent, function (key, val) {
+                    contentHtml +=contentCard(val);
+                });
+                $('.check-global-section-2').html(contentHtml);
+            }
+
+            keywordList = ajaxCall(keywordUrl);
+            if (keywordList.length > 0) {
+                updateKeywordList(keywordList);
+            }
+        })
     })
     function contentCard(data){
         return `<div class="timeline-right-side-1">
