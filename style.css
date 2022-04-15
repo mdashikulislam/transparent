@@ -563,6 +563,13 @@ span.flag-icon{
 .mobile-screen{
   display: none;
 }
+.timeline-heading a{
+  text-decoration: none;
+}
+.share-icon-1 a{
+  background: transparent;
+  padding: 0;
+}
 @media only screen and (min-width: 768px) {
   .large-screen{
     display: block;

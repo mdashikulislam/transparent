@@ -381,7 +381,7 @@
         }
         return `<div class="timeline-${side}-side-1">
                                     <div class="timeline-heading">
-                                        <h4 class="timeline-title">${data[0]}</h4>
+                                        <a href="${data[3]}"><h4 class="timeline-title">${data[0]}</h4></a>
                                         <p>${data[7]}</p>
                                         <div>
                                             <span class="flag-icon flag-icon-${data[6]}"></span>
@@ -402,7 +402,7 @@
     function getCardLeft(data) {
         return `<div class="timeline-left-side-1">
                                     <div class="timeline-heading">
-                                        <h4 class="timeline-title">${data[0]}</h4>
+                                        <a href="${data[3]}"><h4 class="timeline-title">${data[0]}</h4></a>
                                         <p>${data[7]}</p>
                                         <div>
                                             <span class="flag-icon flag-icon-${data[6]}"></span>
@@ -423,7 +423,7 @@
     function getCardRight(data) {
         return `<div class="timeline-right-side-1">
                                     <div class="timeline-heading">
-                                        <h4 class="timeline-title">${data[0]}</h4>
+                                        <a href="${data[3]}"><h4 class="timeline-title">${data[0]}</h4></a>
                                         <p>${data[7]}</p>
                                         <div>
                                             <span class="flag-icon flag-icon-${data[6]}"></span>

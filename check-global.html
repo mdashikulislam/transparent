@@ -136,7 +136,7 @@
         if (header.length > 0) {
             var headerHtml = `<div class="timeline-left-side-1">
                 <div class="timeline-heading">
-                  <h4 class="timeline-title">${header[0][0]}</h4>
+                  <a href="${header[0][3]}"><h4 class="timeline-title">${header[0][0]}</h4></a>
                   <div class="check-global-section-1-1 ms-auto">
                     <p>${header[0][7]}</p>
                     <div>
@@ -325,7 +325,7 @@
     function contentCard(data){
         return `<div class="timeline-right-side-1">
                 <div class="timeline-heading">
-                  <h4 class="timeline-title">${data[0]}</h4>
+                  <a href="${data[3]}"><h4 class="timeline-title">${data[0]}</h4></a>
                   <div class="check-global-section-1-1 ms-auto">
                     <p>${data[7]}</p>
                     <div>
