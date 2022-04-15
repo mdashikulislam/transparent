@@ -32,7 +32,7 @@
         <div class="container-fluid">
             <a class="navbar-brand" href="index.html"><img src="assets/images/Logo.png" alt=""></a>
             <div class="header-date-1">
-                <input type="text" class="form-control" id="datepicker">
+
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarsExample03"
                     aria-controls="navbarsExample03" aria-expanded="false" aria-label="Toggle navigation">
@@ -56,30 +56,9 @@
             </div>
         </div>
     </nav>
-
-    <section class="home-section-1">
-        <div class="container">
-            <div class="home-section-1-1">
-                <div class="home-section-1-left-arror">
-                    <button id="left-button">
-                        <i class="bi bi-caret-left"></i>
-                    </button>
-                </div>
-                <ul class="home-section-1-sub-1" id="keyword-list">
-
-                </ul>
-                <div class="home-section-1-right-arror ms-auto">
-                    <button id="right-button">
-                        <i class="bi bi-caret-right"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </section>
-
     <div class="container">
         <div class="row">
-            <div class="col-12 text-center mt-3">
+            <div class="col-12 text-center mt-5">
                 <a class="btn btn-dark" href="index.html">zurück</a>
             </div>
         </div>
@@ -172,27 +151,6 @@
             $('.check-global-section-2').html('');
         }
 
-        var dateList = ajaxCall('https://transpanda.news/tpapi/rss_getdates.cfm');
-        if (dateList.length > 0) {
-            $.each(dateList, function (key, val) {
-                dateArray.push(val[0].replaceAll('.', '-'));
-            });
-            $("#datepicker").datepicker({
-                beforeShowDay: function (date) {
-                    var dateList = `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${("0" + (date.getDate())).slice(-2)}`;
-                    if ($.inArray(dateList, dateArray) !== -1) {
-                        return [true, ''];
-                    }
-                    return [false, ''];
-                }
-            });
-        } else {
-            $("#datepicker").datepicker();
-        }
-        keywordList = ajaxCall(`https://transpanda.news/tpapi/rss_getkeywords.cfm?date=${currentDate}&countries=${header[0][5]},${header[0][6]}`);
-        if (keywordList.length > 0) {
-            updateKeywordList(keywordList)
-        }
         var countryList = ajaxCall('https://transpanda.news/tpapi/rss_getcountries.cfm');
         if (countryList.length > 0) {
             var countryHtml = '';
@@ -205,97 +163,9 @@
 
     })
     $(document).ready(function () {
-        $(document).on('change', '#datepicker', function () {
-            //SwalInit();
-            currentData = $(this).val().replaceAll('/','-');
-            var contentUrl = `https://transpanda.news/tpapi/rss_getglobalcontent.cfm?date=${currentData}`;
-            if ($('.key-class.active').length > 0) {
-                var newKeyword = [];
-                $('.key-class').each(function () {
-                    if ($(this).hasClass('active')) {
-                        newKeyword.push($(this).data('value'))
-                    }
-                });
-                contentUrl += `&keyword=${newKeyword.toString()}`;
-            } else {
-                contentUrl += `&keyword=${getUrlParameter('keyword')}`;
-            }
-            var keywordUrl = `https://transpanda.news/tpapi/rss_getkeywords.cfm?date=${currentData}`;
-            var allCountryKeyword = '';
-            $('.selectpicker').each(function (){
-                if ($(this).val().length > 0){
-                    contentUrl +=`&countries=${$(this).val().toString()}`;
-                    allCountryKeyword +=`${$(this).val().toString()}`;
-                }else{
-                    contentUrl +=`&countries=${header[0][5]},${header[0][6]}`;
-                    allCountryKeyword +=`${header[0][5]},${header[0][6]}`;
-                }
-            });
-            keywordUrl +=`&countries=${allCountryKeyword}`;
-            contentUrl +=`&fromlink=${url}&from=1&to=50`;
-
-            var globalContent = ajaxCall(contentUrl);
-            if (globalContent.length > 0) {
-                var contentHtml = '';
-                $.each(globalContent, function (key, val) {
-                    contentHtml +=contentCard(val);
-                });
-                $('.check-global-section-2').html(contentHtml);
-            }else{
-                $('.check-global-section-2').html('');
-            }
-
-            keywordList = ajaxCall(keywordUrl);
-            if (keywordList.length > 0) {
-                updateKeywordList(keywordList);
-            }
-        })
-        $(document).on('click', '.key-class', function () {
-            $(this).toggleClass('active');
-            var contentUrl = `https://transpanda.news/tpapi/rss_getglobalcontent.cfm?date=${currentDate}`;
-            if ($('.key-class.active').length > 0) {
-                var newKeyword = [];
-                $('.key-class').each(function () {
-                    if ($(this).hasClass('active')) {
-                        newKeyword.push($(this).data('value'))
-                    }
-                });
-                contentUrl += `&keyword=${newKeyword.toString()}`;
-            } else {
-                contentUrl += `&keyword=${getUrlParameter('keyword')}`;
-            }
-            $('.selectpicker').each(function (){
-                if ($(this).val().length > 0){
-                    contentUrl +=`&countries=${$(this).val().toString()}`;
-                }else{
-                    contentUrl +=`&countries=${header[0][5]},${header[0][6]}`;
-                }
-            });
-            contentUrl +=`&fromlink=${url}&from=1&to=50`;
-            var globalContent = ajaxCall(contentUrl);
-            if (globalContent.length > 0) {
-                var contentHtml = '';
-                $.each(globalContent, function (key, val) {
-                    contentHtml +=contentCard(val);
-                });
-                $('.check-global-section-2').html(contentHtml);
-            }else{
-                $('.check-global-section-2').html('');
-            }
-        });
         $(document).on('change', '.selectpicker', function () {
             var contentUrl = `https://transpanda.news/tpapi/rss_getglobalcontent.cfm?date=${currentDate}`;
-            if ($('.key-class.active').length > 0) {
-                var newKeyword = [];
-                $('.key-class').each(function () {
-                    if ($(this).hasClass('active')) {
-                        newKeyword.push($(this).data('value'))
-                    }
-                });
-                contentUrl += `&keyword=${newKeyword.toString()}`;
-            } else {
-                contentUrl += `&keyword=${getUrlParameter('keyword')}`;
-            }
+            contentUrl += `&keyword=${getUrlParameter('keyword')}`;
             $('.selectpicker').each(function (){
                 $('.selectpicker').each(function (){
                     if ($(this).val().length > 0){
@@ -317,8 +187,6 @@
                 $('.check-global-section-2').html('');
             }
         })
-
-
     })
 
     function contentCard(data){
