@@ -246,7 +246,9 @@
             if (globalContent.length > 0) {
                 var contentHtmlLeft = '';
                 var contentHtmlRight = '';
+                var mobileContent = '';
                 $.each(globalContent, function (key, val) {
+                    mobileContent +=getCardBoth(val,key);
                     if (val[12] == 'L'){
                         contentHtmlLeft += getCardLeft(val);
                     }else{
@@ -255,6 +257,7 @@
                 });
                 $('.home-section-3-4').html(contentHtmlLeft);
                 $('.home-section-3-3').html(contentHtmlRight);
+                $('.home-section-mobile').html(mobileContent);
             }
 
             keywordList = ajaxCall(keywordUrl);
@@ -299,7 +302,9 @@
             if (globalContent.length > 0) {
                 var contentHtmlLeft = '';
                 var contentHtmlRight = '';
+                var mobileContent = '';
                 $.each(globalContent, function (key, val) {
+                    mobileContent +=getCardBoth(val,key);
                     if (val[12] == 'L'){
                         contentHtmlLeft += getCardLeft(val);
                     }else{
@@ -308,6 +313,7 @@
                 });
                 $('.home-section-3-4').html(contentHtmlLeft);
                 $('.home-section-3-3').html(contentHtmlRight);
+                $('.home-section-mobile').html(mobileContent);
             }
         });
         $(document).on('change', '.selectpicker', function () {
@@ -343,7 +349,9 @@
             if (globalContent.length > 0) {
                 var contentHtmlLeft = '';
                 var contentHtmlRight = '';
+                var mobileContent = '';
                 $.each(globalContent, function (key, val) {
+                    mobileContent +=getCardBoth(val,key);
                     if (val[12] == 'L'){
                         contentHtmlLeft += getCardLeft(val);
                     }else{
@@ -352,6 +360,7 @@
                 });
                 $('.home-section-3-4').html(contentHtmlLeft);
                 $('.home-section-3-3').html(contentHtmlRight);
+                $('.home-section-mobile').html(mobileContent);
             }
         })
     })
