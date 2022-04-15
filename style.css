@@ -575,5 +575,11 @@ span.flag-icon{
   .home-section-3-4{
     padding-right: 0!important;
   }
-
+  .timeline-heading-sub-1 a{
+    padding: 8px 2px!important;
+    text-align: center!important;
+  }
+  .share-icon-1{
+    margin-left: 5px!important;
+  }
 }
