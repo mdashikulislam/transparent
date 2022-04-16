@@ -58,6 +58,9 @@
     </nav>
     <div class="slider">
         <div class="images-overlay"></div>
+        <div class="icon">
+            <a href=""><i class="fa fa-share-alt" aria-hidden="true"></i></a>
+        </div>
         <div class="container" >
             <div class="row justify-content-center">
                 <div class="col-12 col-lg-6">
@@ -356,7 +359,7 @@
             color: #777;
         }
         .slider{
-            padding: 78px 0;
+            padding: 150px 0;
             background-image: url(https://images.unsplash.com/photo-1650011518223-9349a370f236?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=2389&q=80);
             background-repeat: no-repeat;
             background-size: cover;
@@ -379,9 +382,27 @@
         .slider .content h2{
             color: #fff!important;
             z-index: 999;
+            font-size: 40px;
         }
         .slider .content p{
             color: #fff;
+        }
+        .slider .icon{
+            position: absolute;
+            top: 10%;
+            right: 5%;
+        }
+        .slider .icon a{
+
+        }
+        .slider .icon a i{
+            color: #000;
+            font-size: 28px;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            background: #ededed;
+            text-align: center;
         }
         @media only screen and (max-width: 767px) {
             .footer .ic{
