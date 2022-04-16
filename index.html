@@ -147,7 +147,6 @@
         initialValue = ajaxCall('https://transpanda.news/tpapi/rss_getinitvalues.cfm');
         currentData = initialValue[0][1].replaceAll('.','-');
         activeKeyword = initialValue[1][1];
-        console.log(initialValue)
         if (initialValue.length > 0){
             var globalContent = ajaxCall(`https://transpanda.news/tpapi/rss_getcontent.cfm?date=${currentData}&keyword=${initialValue[1][1]}&countrycode1=${initialValue[4][1]}&countrycode2=${initialValue[2][1]}&from=1&to=200`);
             if (globalContent.length > 0) {
@@ -170,7 +169,7 @@
         Swal.close();
         keywordList = ajaxCall(`https://transpanda.news/tpapi/rss_getkeywords.cfm?date=${currentData}&countries=${[initialValue[4][1],initialValue[2][1]].toString()}`);
         if (keywordList.length > 0) {
-            updateKeywordList(keywordList)
+            updateKeywordList(keywordList,initialValue[1][1])
         }
         var dateList = ajaxCall('https://transpanda.news/tpapi/rss_getdates.cfm');
         if (dateList.length > 0) {
@@ -446,11 +445,16 @@
                                     </div>
                                 </div>`;
     }
-    function updateKeywordList(keywordList) {
+    function updateKeywordList(keywordList,selected) {
         var keywordListHtml = '';
+        console.log(selected)
         $.each(keywordList, function (key, val) {
             if (val[0] !== '') {
-                keywordListHtml += `<li class="key-class" data-value="${val[0]}">
+                keywordListHtml += `<li class="key-class `;
+                if (selected !== undefined && val[0] == selected){
+                    keywordListHtml +=` active `;
+                }
+                keywordListHtml+=`" data-value="${val[0]}">
                     <span>${val[0]}</span>
                     <i class="bi bi-x-lg"></i>
                   </li>`;
