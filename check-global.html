@@ -24,7 +24,7 @@
     <link rel="stylesheet" href="https://code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css">
     <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.js"></script>
     <link href="https://transpanda.news/assets/css/flag-icon.css" rel="stylesheet">
-
+    <script type='text/javascript' src='https://platform-api.sharethis.com/js/sharethis.js#property=625a7ea1742b6c001a1bdc3b&product=inline-share-buttons' async='async'></script>
 </head>
 <body>
 <main>
@@ -40,15 +40,18 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarsExample03">
                 <ul class="navbar-nav ms-auto mb-2 mb-sm-0">
+                    <!--                     <li class="nav-item share-menu">
+                                        <div class="sharethis-inline-share-buttons"></div>
+                                        </li> -->
                     <li class="nav-item Who-are-we-menu">
-                        <a class="nav-link" href="who-are-we.html">Who are we?</a>
+                        <a class="nav-link" href="#">Who are we?</a>
                     </li>
                     <li class="nav-item search-icon-menu">
                         <i class="bi bi-search"></i>
                     </li>
-                    <li class="nav-item lng-menu">
-                        EN
-                    </li>
+                    <!--                     <li class="nav-item lng-menu">
+                                            EN
+                                        </li> -->
                     <li class="nav-item donation-menu">
                         <a class="nav-link" href="#">MAKE A DONATION</a>
                     </li>
@@ -72,7 +75,7 @@
 
                         </div>
                         <div class="home-section-2-1 check-global-section-4">
-                            <h6>Country</h6>
+                            <h6>Länderauswahl</h6>
                             <select class="selectpicker" multiple aria-label="Default select example"
                                     data-live-search="true">
                             </select>
@@ -119,7 +122,7 @@
                   <div class="check-global-section-1-1 ms-auto">
                     <p>${header[0][7]}</p>
                     <div>
-                        <span style="border-radius: 50%;width: 55px;height: 55px" class="flag-icon flag-icon-${header[0][6]}"></span>
+                     <span class="flag-icon flag-icon-${header[0][6]}" style="width:30px;"></span>
                     </div>
                   </div>
                 </div>
@@ -129,8 +132,7 @@
                   <h5>${moment(new Date(header[0][4])).fromNow()}</h5>
                 </div>
                 <div class="timeline-heading-sub-1">
-                  <a  href="check-global.html?link=${header[0][3]}&date=${currentDate}&keyword=${activeKeyword}">Check global</a>
-                  <p class="share-icon-1"><a href="${header[0][3]}" target="_blank"><i class="bi bi-share-fill"></i></a></p>
+                  <div class="sharethis-inline-share-buttons" data-title='Transpanda: ${header[0][0]}'></div>
                   <h3 class="ms-auto"><i class="bi bi-circle-fill" style="color: ${header[0][10]}"></i>WPFI: ${header[0][9]}</h3>
                 </div>
               </div>`;
@@ -159,9 +161,11 @@
             $.each(globalContent, function (key, val) {
                 contentHtml +=contentCard(val);
             });
-             $('.check-global-section-2').html(contentHtml);
+            $('.check-global-section-2').html(contentHtml);
+            window.__sharethis__.initialize();
         }else{
             $('.check-global-section-2').html('');
+            window.__sharethis__.initialize();
         }
     })
     $(document).ready(function () {
@@ -185,8 +189,10 @@
                     contentHtml +=contentCard(val);
                 });
                 $('.check-global-section-2').html(contentHtml);
+                window.__sharethis__.initialize();
             }else{
                 $('.check-global-section-2').html('');
+                window.__sharethis__.initialize();
             }
         })
     })
@@ -198,7 +204,7 @@
                   <div class="check-global-section-1-1 ms-auto">
                     <p>${data[7]}</p>
                     <div>
-                        <span style="border-radius: 50%;width: 55px;height: 55px" class="flag-icon flag-icon-${data[6]}"></span>
+                    <span class="flag-icon flag-icon-${data[6]}" style="width:30px;"></span>
                     </div>
                   </div>
                 </div>
@@ -208,8 +214,7 @@
                   <h5>${moment(new Date(data[4])).fromNow()}</h5>
                 </div>
                 <div class="timeline-heading-sub-1">
-                  <a data-link="${data[3]}" href="check-global.html?link=${data[3]}&date=${currentDate}&keyword=${activeKeyword}">Check global</a>
-                  <p class="share-icon-1"><a href="${data[3]}" target="_blank"><i class="bi bi-share-fill"></i></a></p>
+                  <a data-link="${data[3]}" href="check-globalneu.html?link=${data[3]}&date=${currentDate}&keyword=${activeKeyword}">Check global</a>
                   <h3 class="ms-auto"><i class="bi bi-circle-fill" style="color: ${data[10]}"></i>WPFI: ${data[9]}</h3>
                 </div>
               </div>`;
@@ -269,6 +274,7 @@
             scrollLeft: "-=200px"
         }, "slow");
     });
+
 
 </script>
 </body>
