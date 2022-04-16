@@ -222,7 +222,7 @@
 
         .footer{
             background: #000000;
-            padding-bottom: 40px;
+            padding-bottom: 30px;
             padding-top: 60px;
         }
         .footer .ic a{
@@ -325,9 +325,11 @@
             display: flex;
             justify-content: center;
             margin-top: 50px;
+            width: 100%;
+            height: auto;
         }
         .data .img img{
-            width: auto;
+            width: 100%;
             max-height: 400px;
         }
 
@@ -382,7 +384,21 @@
             color: #fff;
         }
         @media only screen and (max-width: 767px) {
-
+            .footer .ic{
+                text-align: center;
+            }
+            .footer .last{
+                display: block;
+                text-align: center;
+            }
+            .footer .last .el{
+                text-align: center;
+                justify-content: center;
+            }
+            .content .nav-tabs{
+                text-align: center;
+                margin-bottom: 20px;
+            }
         }
     </style>
 </main>
