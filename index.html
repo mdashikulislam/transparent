@@ -164,6 +164,10 @@
                 $('.home-section-3-4').html(contentHtmlLeft);
                 $('.home-section-3-3').html(contentHtmlRight);
                 $('.home-section-mobile').html(mobileContent);
+            }else{
+                $('.home-section-3-4').html('');
+                $('.home-section-3-3').html('');
+                $('.home-section-mobile').html('');
             }
         }
         Swal.close();
@@ -176,18 +180,93 @@
             $.each(dateList, function (key, val) {
                 dateArray.push(val[0].replaceAll('.','-'));
             });
-            $( "#datepicker" ).datepicker({
-                beforeShowDay: function(date) {
-                    var dateList = `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${("0" + (date.getDate())).slice(-2)}`;
-                    if ($.inArray(dateList,dateArray) !== -1) {
-                        return [true, ''];
-                    }
-                    return [false, ''];
-                }
-            });
-            $( "#datepicker" ).datepicker("setDate", moment(currentData).format('MM/DD/YYYY'));
+            // $( "#datepicker" ).datepicker({
+            //     beforeShowDay: function(date) {
+            //         var dateList = `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${("0" + (date.getDate())).slice(-2)}`;
+            //         if ($.inArray(dateList,dateArray) !== -1) {
+            //             return [true, ''];
+            //         }
+            //         return [false, ''];
+            //     }
+            // });
+            // $('#datepicker').datepicker({
+            //     prevText: '&#x3c;zurück', prevStatus: '',
+            //     prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
+            //     nextText: 'Vor&#x3e;', nextStatus: '',
+            //     nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
+            //     currentText: 'heute', currentStatus: '',
+            //     todayText: 'heute', todayStatus: '',
+            //     clearText: '-', clearStatus: '',
+            //     closeText: 'schließen', closeStatus: '',
+            //     monthNames: ['Januar','Februar','März','April','Mai','Juni',
+            //         'Juli','August','September','Oktober','November','Dezember'],
+            //     monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
+            //         'Jul','Aug','Sep','Okt','Nov','Dez'],
+            //     dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+            //     dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+            //     dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+            //     showMonthAfterYear: false,
+            //     showOn: 'focus',
+            //     buttonImage: 'media/img/calendar.png',
+            //     buttonImageOnly: true,
+            //     dateFormat:'DD, dd MM yy'
+            // }).datepicker("setDate", "0");
+            $( "#datepicker" )
+                .datepicker({
+                    // beforeShowDay: function(date) {
+                    //     var dateList = `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${("0" + (date.getDate())).slice(-2)}`;
+                    //     if ($.inArray(dateList,dateArray) !== -1) {
+                    //         return [true, ''];
+                    //     }
+                    //     return [false, ''];
+                    // },
+                    prevText: '&#x3c;zurück', prevStatus: '',
+                    prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
+                    nextText: 'Vor&#x3e;', nextStatus: '',
+                    nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
+                    currentText: 'heute', currentStatus: '',
+                    todayText: 'heute', todayStatus: '',
+                    clearText: '-', clearStatus: '',
+                    closeText: 'schließen', closeStatus: '',
+                    monthNames: ['Januar','Februar','März','April','Mai','Juni',
+                        'Juli','August','September','Oktober','November','Dezember'],
+                    monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
+                        'Jul','Aug','Sep','Okt','Nov','Dez'],
+                    dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+                    dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+                    dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+                    showMonthAfterYear: false,
+                    showOn: 'focus',
+                    buttonImage: 'media/img/calendar.png',
+                    buttonImageOnly: true,
+                    dateFormat:'DD, dd MM yy'
+                })
+                .datepicker("setDate", "0");
         }else{
-            $("#datepicker").datepicker("setDate", "0");
+            $("#datepicker")
+                .datepicker({
+                    prevText: '&#x3c;zurück', prevStatus: '',
+                    prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
+                    nextText: 'Vor&#x3e;', nextStatus: '',
+                    nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
+                    currentText: 'heute', currentStatus: '',
+                    todayText: 'heute', todayStatus: '',
+                    clearText: '-', clearStatus: '',
+                    closeText: 'schließen', closeStatus: '',
+                    monthNames: ['Januar','Februar','März','April','Mai','Juni',
+                        'Juli','August','September','Oktober','November','Dezember'],
+                    monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
+                        'Jul','Aug','Sep','Okt','Nov','Dez'],
+                    dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+                    dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+                    dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+                    showMonthAfterYear: false,
+                    showOn: 'focus',
+                    buttonImage: 'media/img/calendar.png',
+                    buttonImageOnly: true,
+                    dateFormat:'DD, dd MM yy'
+                })
+                .datepicker("setDate", "0");
         }
         var countryList = ajaxCall('https://transpanda.news/tpapi/rss_getcountries.cfm');
         if (countryList.length > 0) {
@@ -211,10 +290,11 @@
     $(document).ready(function () {
         $(document).on('change', '#datepicker', function () {
             //SwalInit();
-            currentData = $(this).val().replaceAll('/','-');
+            currentData = moment($(this).val()).format('YYYY-MM-DD');
             var contentUrl = `https://transpanda.news/tpapi/rss_getcontent.cfm?date=${currentData}`;
+            var newKeyword = [];
             if ($('.key-class.active').length > 0) {
-                var newKeyword = [];
+
                 $('.key-class').each(function () {
                     if ($(this).hasClass('active')) {
                         newKeyword.push($(this).data('value'))
@@ -223,6 +303,7 @@
                 contentUrl += `&keyword=${newKeyword.toString()}`;
             } else {
                 contentUrl += `&keyword=${initialValue[1][1]}`;
+                newKeyword.push(initialValue[1][1]);
             }
             var keywordUrl = `https://transpanda.news/tpapi/rss_getkeywords.cfm?date=${currentData}`;
             var allCountryKeyword = '';
@@ -265,11 +346,15 @@
                 $('.home-section-3-4').html(contentHtmlLeft);
                 $('.home-section-3-3').html(contentHtmlRight);
                 $('.home-section-mobile').html(mobileContent);
+            }else{
+                $('.home-section-3-4').html('');
+                $('.home-section-3-3').html('');
+                $('.home-section-mobile').html('');
             }
 
             keywordList = ajaxCall(keywordUrl);
             if (keywordList.length > 0) {
-                updateKeywordList(keywordList);
+                updateKeywordList(keywordList,newKeyword.toString());
             }
         })
         $(document).on('click', '.key-class', function () {
@@ -321,6 +406,10 @@
                 $('.home-section-3-4').html(contentHtmlLeft);
                 $('.home-section-3-3').html(contentHtmlRight);
                 $('.home-section-mobile').html(mobileContent);
+            }else{
+                $('.home-section-3-4').html('');
+                $('.home-section-3-3').html('');
+                $('.home-section-mobile').html('');
             }
         });
         $(document).on('change', '.selectpicker', function () {
@@ -368,6 +457,10 @@
                 $('.home-section-3-4').html(contentHtmlLeft);
                 $('.home-section-3-3').html(contentHtmlRight);
                 $('.home-section-mobile').html(mobileContent);
+            }else{
+                $('.home-section-3-4').html('');
+                $('.home-section-3-3').html('');
+                $('.home-section-mobile').html('');
             }
         })
     })
@@ -447,12 +540,18 @@
     }
     function updateKeywordList(keywordList,selected) {
         var keywordListHtml = '';
-        console.log(selected)
         $.each(keywordList, function (key, val) {
             if (val[0] !== '') {
                 keywordListHtml += `<li class="key-class `;
-                if (selected !== undefined && val[0] == selected){
-                    keywordListHtml +=` active `;
+                if (selected !== undefined){
+                    var arr = selected.split(",");
+                    //console.log(arr[0])
+                    $.each(arr,function (k,v){
+                        if (v == val[0]){
+                            keywordListHtml +=` active `;
+                        }
+                    })
+
                 }
                 keywordListHtml+=`" data-value="${val[0]}">
                     <span>${val[0]}</span>
