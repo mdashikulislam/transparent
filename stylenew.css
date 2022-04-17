@@ -601,7 +601,7 @@ span.flag-icon{
 }
 .privacy{
   position: fixed;
-  top: 25%;
+  top: 15%;
   left: 0;
   z-index: 1;
 }
