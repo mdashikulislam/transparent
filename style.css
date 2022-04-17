@@ -596,9 +596,9 @@ span.flag-icon{
 }
 .privacy{
   position: fixed;
-  top: 70%;
+  top: 20%;
   left: 0;
-
+  z-index: 1;
 }
 .modal{
   z-index: 9999999;
