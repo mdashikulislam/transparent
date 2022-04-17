@@ -603,6 +603,7 @@ span.flag-icon{
   position: fixed;
   top: 70%;
   left: 0;
+  z-index: 1;
 }
 .modal{
   z-index: 999999;
