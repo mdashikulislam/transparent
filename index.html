@@ -49,7 +49,23 @@
         </div>
     </div>
 </div>
-
+<div class="modal fade bd-example-modal-lg" id="keywordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="keywordModalLabel">All Keywords</h5>
+            </div>
+            <div class="modal-body">
+                <div>
+                    <ul class="keyword-list"></ul>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary close"  data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
 
 <main>
     <nav class="navbar navbar-expand-sm" aria-label="Third navbar example">
@@ -88,13 +104,16 @@
                         <i class="bi bi-caret-left"></i>
                     </button>
                 </div>
-                <ul class="home-section-1-sub-1" id="keyword-list">
+                <ul class="home-section-1-sub-1 ds" id="keyword-list">
                 </ul>
                 <div class="home-section-1-right-arror ms-auto">
                     <button id="right-button">
                         <i class="bi bi-caret-right"></i>
                     </button>
                 </div>
+            </div>
+            <div class="text-center">
+                <a href="javascript:void(0)" class="btn btn-sm btn-primary allkeyword">All Keyword</a>
             </div>
         </div>
     </section>
@@ -389,6 +408,10 @@
         })
         $('.close').on('click',function (){
             $('#exampleModalCenter').modal('hide');
+            $('#keywordModal').modal('hide');
+        });
+        $('.allkeyword').on('click',function (){
+            $('#keywordModal').modal('show');
         });
 
         $(document).on('click','.check-global',function (e){
@@ -420,7 +443,7 @@
             var newKeyword = [];
             if ($('.key-class.active').length > 0) {
 
-                $('.key-class').each(function () {
+                $('.ds .key-class').each(function () {
                     if ($(this).hasClass('active')) {
                         newKeyword.push($(this).data('value'))
                     }
@@ -485,11 +508,25 @@
             }
         })
         $(document).on('click', '.key-class', function () {
-            $(this).toggleClass('active');
+            var text = $(this).data('value');
+            $('.key-class').each(function (){
+                if ($(this).data('value') == text){
+                    // console.log($(this).hasClass('active'))
+                    // if ($(this).hasClass('active')){
+                    //     $(this).removeClass('active');
+                    // }else{
+                    //     $(this).removeClass('active');
+                    //     $(this).addClass('active');
+                    // }
+                    $(this).toggleClass('active');
+                }
+
+            })
+
             var contentUrl = `https://transpanda.news/tpapi/rss_getcontent.cfm?date=${currentData}`;
             if ($('.key-class.active').length > 0) {
                 var newKeyword = [];
-                $('.key-class').each(function () {
+                $('.ds .key-class').each(function () {
                     if ($(this).hasClass('active')) {
                         newKeyword.push($(this).data('value'))
                     }
@@ -543,7 +580,7 @@
             var contentUrl = `https://transpanda.news/tpapi/rss_getcontent.cfm?date=${currentData}`;
             if ($('.key-class.active').length > 0) {
                 var newKeyword = [];
-                $('.key-class').each(function () {
+                $('.ds .key-class').each(function () {
                     if ($(this).hasClass('active')) {
                         newKeyword.push($(this).data('value'))
                     }
@@ -686,6 +723,7 @@
             }
         });
         $('#keyword-list').html(keywordListHtml);
+        $('.keyword-list').html(keywordListHtml);
     }
     function ajaxCall(url) {
         var data;

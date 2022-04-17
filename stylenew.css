@@ -608,3 +608,24 @@ span.flag-icon{
 .modal{
   z-index: 999999;
 }
+ul.keyword-list{
+  display: block;
+}
+ul.keyword-list li {
+  list-style-type: none;
+  border: 1px solid #ededed;
+  margin-right: 10px;
+  padding: 3px 10px;
+  border-radius: 4px;
+  display: inline-block;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+ul.keyword-list li.active{
+  background: #d5392c!important;
+  border-color: #d5392c!important;
+  color: #fff;
+}
+.allkeyword{
+  visibility: hidden;
+}
