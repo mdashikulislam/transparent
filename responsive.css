@@ -1,6 +1,10 @@
 @media only screen and (max-width: 767px) {
     .navbar-brand {
         margin-left: 0;
+        margin-top: 30px!important;
+    }
+    .privacy{
+        top: 0;
     }
     .Who-are-we-menu {
         margin-right: 0;
