@@ -144,105 +144,48 @@
     var initialValue = [];
     var activeKeyword = '';
     $(window).on('load', function () {
-        initialValue = ajaxCall('https://transpanda.news/tpapi/rss_getinitvalues.cfm');
-        currentData = initialValue[0][1].replaceAll('.','-');
-        activeKeyword = initialValue[1][1];
-        if (initialValue.length > 0){
-            var globalContent = ajaxCall(`https://transpanda.news/tpapi/rss_getcontent.cfm?date=${currentData}&keyword=${initialValue[1][1]}&countrycode1=${initialValue[4][1]}&countrycode2=${initialValue[2][1]}&from=1&to=200`);
-            if (globalContent.length > 0) {
-                var contentHtmlLeft = '';
-                var contentHtmlRight = '';
-                var mobileContent = '';
-                $.each(globalContent, function (key, val) {
-                    mobileContent +=getCardBoth(val,key);
-                    if (val[12] == 'L'){
-                        contentHtmlLeft += getCardLeft(val);
-                    }else{
-                        contentHtmlRight += getCardRight(val);
-                    }
-                });
-                $('.home-section-3-4').html(contentHtmlLeft);
-                $('.home-section-3-3').html(contentHtmlRight);
-                $('.home-section-mobile').html(mobileContent);
-            }else{
-                $('.home-section-3-4').html('');
-                $('.home-section-3-3').html('');
-                $('.home-section-mobile').html('');
+        if (localStorage.getItem('history') !==null){
+            var history = JSON.parse(localStorage.getItem('history'));
+            initialValue[1]=['keyword',history[0].keyword];
+            initialValue[4]=['country_code1',history[0].countryCode1[0].toString()];
+            initialValue[2]=['country_code2',history[0].countryCode2[0].toString()];
+            // initialValue.splice(1,1,[history[0].keyword]);
+            // initialValue.splice(4,1,[history[0].countryCode1[0].toString()]);
+            // initialValue.splice(2,1,[history[0].countryCode2[0].toString()]);
+            console.log(initialValue)
+
+            currentData = history[0].date;
+            activeKeyword = history[0].keyword;
+            if (history.length > 0){
+                var globalContent = ajaxCall(`https://transpanda.news/tpapi/rss_getcontent.cfm?date=${currentData}&keyword=${activeKeyword}&countrycode1=${history[0].countryCode1.toString()}&countrycode2=${history[0].countryCode2.toString()}&from=1&to=200`);
+                if (globalContent.length > 0) {
+                    var contentHtmlLeft = '';
+                    var contentHtmlRight = '';
+                    var mobileContent = '';
+                    $.each(globalContent, function (key, val) {
+                        mobileContent +=getCardBoth(val,key);
+                        if (val[12] == 'L'){
+                            contentHtmlLeft += getCardLeft(val);
+                        }else{
+                            contentHtmlRight += getCardRight(val);
+                        }
+                    });
+                    $('.home-section-3-4').html(contentHtmlLeft);
+                    $('.home-section-3-3').html(contentHtmlRight);
+                    $('.home-section-mobile').html(mobileContent);
+                }else{
+                    $('.home-section-3-4').html('');
+                    $('.home-section-3-3').html('');
+                    $('.home-section-mobile').html('');
+                }
             }
-        }
-        Swal.close();
-        keywordList = ajaxCall(`https://transpanda.news/tpapi/rss_getkeywords.cfm?date=${currentData}&countries=${[initialValue[4][1],initialValue[2][1]].toString()}`);
-        if (keywordList.length > 0) {
-            updateKeywordList(keywordList,initialValue[1][1])
-        }
-        var dateList = ajaxCall('https://transpanda.news/tpapi/rss_getdates.cfm');
-        if (dateList.length > 0) {
-            $.each(dateList, function (key, val) {
-                dateArray.push(val[0].replaceAll('.','-'));
-            });
-            // $( "#datepicker" ).datepicker({
-            //     beforeShowDay: function(date) {
-            //         var dateList = `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${("0" + (date.getDate())).slice(-2)}`;
-            //         if ($.inArray(dateList,dateArray) !== -1) {
-            //             return [true, ''];
-            //         }
-            //         return [false, ''];
-            //     }
-            // });
-            // $('#datepicker').datepicker({
-            //     prevText: '&#x3c;zurück', prevStatus: '',
-            //     prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
-            //     nextText: 'Vor&#x3e;', nextStatus: '',
-            //     nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
-            //     currentText: 'heute', currentStatus: '',
-            //     todayText: 'heute', todayStatus: '',
-            //     clearText: '-', clearStatus: '',
-            //     closeText: 'schließen', closeStatus: '',
-            //     monthNames: ['Januar','Februar','März','April','Mai','Juni',
-            //         'Juli','August','September','Oktober','November','Dezember'],
-            //     monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
-            //         'Jul','Aug','Sep','Okt','Nov','Dez'],
-            //     dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
-            //     dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-            //     dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-            //     showMonthAfterYear: false,
-            //     showOn: 'focus',
-            //     buttonImage: 'media/img/calendar.png',
-            //     buttonImageOnly: true,
-            //     dateFormat:'DD, dd MM yy'
-            // }).datepicker("setDate", "0");
-            $( "#datepicker" )
-                .datepicker({
-                    // beforeShowDay: function(date) {
-                    //     var dateList = `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${("0" + (date.getDate())).slice(-2)}`;
-                    //     if ($.inArray(dateList,dateArray) !== -1) {
-                    //         return [true, ''];
-                    //     }
-                    //     return [false, ''];
-                    // },
-                    prevText: '&#x3c;zurück', prevStatus: '',
-                    prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
-                    nextText: 'Vor&#x3e;', nextStatus: '',
-                    nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
-                    currentText: 'heute', currentStatus: '',
-                    todayText: 'heute', todayStatus: '',
-                    clearText: '-', clearStatus: '',
-                    closeText: 'schließen', closeStatus: '',
-                    monthNames: ['Januar','Februar','März','April','Mai','Juni',
-                        'Juli','August','September','Oktober','November','Dezember'],
-                    monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
-                        'Jul','Aug','Sep','Okt','Nov','Dez'],
-                    dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
-                    dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-                    dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
-                    showMonthAfterYear: false,
-                    showOn: 'focus',
-                    buttonImage: 'media/img/calendar.png',
-                    buttonImageOnly: true,
-                    dateFormat:'DD, dd MM yy'
-                })
-                .datepicker("setDate", "0");
-        }else{
+            Swal.close();
+            keywordList = ajaxCall(`https://transpanda.news/tpapi/rss_getkeywords.cfm?date=${currentData}&countries=${history[0].countryCode1.toString()},${history[0].countryCode2.toString()}`);
+            if (keywordList.length > 0) {
+                updateKeywordList(keywordList,history[0].keyword)
+            }else{
+                $('#keyword-list').html('');
+            }
             $("#datepicker")
                 .datepicker({
                     prevText: '&#x3c;zurück', prevStatus: '',
@@ -266,28 +209,180 @@
                     buttonImageOnly: true,
                     dateFormat:'DD, dd MM yy'
                 })
-                .datepicker("setDate", "0");
-        }
-        var countryList = ajaxCall('https://transpanda.news/tpapi/rss_getcountries.cfm');
-        if (countryList.length > 0) {
-            var countryHtmlLeft = '';
-            var countryHtmlRight = '';
-            $.each(countryList, function (key, val) {
-                countryHtmlLeft += `<option ${val[1] == initialValue[4][1] ? 'selected':''} value="${val[1]}">${val[0]}</option>`;
-                countryHtmlRight += `<option ${val[1] == initialValue[2][1] ? 'selected':''} value="${val[1]}">${val[0]}</option>`;
-            });
-            $('.selectpicker').each(function (){
-                if ($(this).data('side') == 'left'){
-                    $(this).html(countryHtmlLeft);
-                    $(this).selectpicker('refresh');
+                .datepicker("setDate", history[0].date_end);
+
+            var countryList = ajaxCall('https://transpanda.news/tpapi/rss_getcountries.cfm');
+            if (countryList.length > 0) {
+                var countryHtmlLeft = '';
+                var countryHtmlRight = '';
+                $.each(countryList, function (key, val) {
+                    countryHtmlLeft += `<option `;
+                    $.each(history[0].countryCode1[0],function (k,v){
+                        if (v == val[1]){
+                            countryHtmlLeft +=` selected `;
+                        }
+                    })
+                    countryHtmlLeft +=` value="${val[1]}">${val[0]}</option>`;
+                    countryHtmlRight += `<option `;
+                    $.each(history[0].countryCode2[0],function (k,v){
+                        if (v == val[1]){
+                            countryHtmlRight +=` selected `;
+                        }
+                    })
+                    countryHtmlRight += ` value="${val[1]}">${val[0]}</option>`;
+                });
+                $('.selectpicker').each(function (){
+                    if ($(this).data('side') == 'left'){
+                        $(this).html(countryHtmlLeft);
+                        $(this).selectpicker('refresh');
+                    }else{
+                        $(this).html(countryHtmlRight);
+                        $(this).selectpicker('refresh');
+                    }
+                })
+            }
+            localStorage.removeItem("history");
+            Swal.close();
+        }else{
+            initialValue = ajaxCall('https://transpanda.news/tpapi/rss_getinitvalues.cfm');
+            currentData = initialValue[0][1].replaceAll('.','-');
+            activeKeyword = initialValue[1][1];
+            if (initialValue.length > 0){
+                var globalContent = ajaxCall(`https://transpanda.news/tpapi/rss_getcontent.cfm?date=${currentData}&keyword=${initialValue[1][1]}&countrycode1=${initialValue[4][1]}&countrycode2=${initialValue[2][1]}&from=1&to=200`);
+                if (globalContent.length > 0) {
+                    var contentHtmlLeft = '';
+                    var contentHtmlRight = '';
+                    var mobileContent = '';
+                    $.each(globalContent, function (key, val) {
+                        mobileContent +=getCardBoth(val,key);
+                        if (val[12] == 'L'){
+                            contentHtmlLeft += getCardLeft(val);
+                        }else{
+                            contentHtmlRight += getCardRight(val);
+                        }
+                    });
+                    $('.home-section-3-4').html(contentHtmlLeft);
+                    $('.home-section-3-3').html(contentHtmlRight);
+                    $('.home-section-mobile').html(mobileContent);
                 }else{
-                    $(this).html(countryHtmlRight);
-                    $(this).selectpicker('refresh');
+                    $('.home-section-3-4').html('');
+                    $('.home-section-3-3').html('');
+                    $('.home-section-mobile').html('');
                 }
-            })
+            }
+            Swal.close();
+            keywordList = ajaxCall(`https://transpanda.news/tpapi/rss_getkeywords.cfm?date=${currentData}&countries=${[initialValue[4][1],initialValue[2][1]].toString()}`);
+            if (keywordList.length > 0) {
+                updateKeywordList(keywordList,initialValue[1][1])
+            }else{
+                $('#keyword-list').html('');
+            }
+            var dateList = ajaxCall('https://transpanda.news/tpapi/rss_getdates.cfm');
+            if (dateList.length > 0) {
+                $.each(dateList, function (key, val) {
+                    dateArray.push(val[0].replaceAll('.','-'));
+                });
+
+                $( "#datepicker" )
+                    .datepicker({
+                        // beforeShowDay: function(date) {
+                        //     var dateList = `${date.getFullYear()}-${("0" + (date.getMonth() + 1)).slice(-2)}-${("0" + (date.getDate())).slice(-2)}`;
+                        //     if ($.inArray(dateList,dateArray) !== -1) {
+                        //         return [true, ''];
+                        //     }
+                        //     return [false, ''];
+                        // },
+                        prevText: '&#x3c;zurück', prevStatus: '',
+                        prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
+                        nextText: 'Vor&#x3e;', nextStatus: '',
+                        nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
+                        currentText: 'heute', currentStatus: '',
+                        todayText: 'heute', todayStatus: '',
+                        clearText: '-', clearStatus: '',
+                        closeText: 'schließen', closeStatus: '',
+                        monthNames: ['Januar','Februar','März','April','Mai','Juni',
+                            'Juli','August','September','Oktober','November','Dezember'],
+                        monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
+                            'Jul','Aug','Sep','Okt','Nov','Dez'],
+                        dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+                        dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+                        dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+                        showMonthAfterYear: false,
+                        showOn: 'focus',
+                        buttonImage: 'media/img/calendar.png',
+                        buttonImageOnly: true,
+                        dateFormat:'DD, dd MM yy'
+                    })
+                    .datepicker("setDate", "0");
+            }else{
+                $("#datepicker")
+                    .datepicker({
+                        prevText: '&#x3c;zurück', prevStatus: '',
+                        prevJumpText: '&#x3c;&#x3c;', prevJumpStatus: '',
+                        nextText: 'Vor&#x3e;', nextStatus: '',
+                        nextJumpText: '&#x3e;&#x3e;', nextJumpStatus: '',
+                        currentText: 'heute', currentStatus: '',
+                        todayText: 'heute', todayStatus: '',
+                        clearText: '-', clearStatus: '',
+                        closeText: 'schließen', closeStatus: '',
+                        monthNames: ['Januar','Februar','März','April','Mai','Juni',
+                            'Juli','August','September','Oktober','November','Dezember'],
+                        monthNamesShort: ['Jan','Feb','Mär','Apr','Mai','Jun',
+                            'Jul','Aug','Sep','Okt','Nov','Dez'],
+                        dayNames: ['Sonntag','Montag','Dienstag','Mittwoch','Donnerstag','Freitag','Samstag'],
+                        dayNamesShort: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+                        dayNamesMin: ['So','Mo','Di','Mi','Do','Fr','Sa'],
+                        showMonthAfterYear: false,
+                        showOn: 'focus',
+                        buttonImage: 'media/img/calendar.png',
+                        buttonImageOnly: true,
+                        dateFormat:'DD, dd MM yy'
+                    })
+                    .datepicker("setDate", "0");
+            }
+            var countryList = ajaxCall('https://transpanda.news/tpapi/rss_getcountries.cfm');
+            if (countryList.length > 0) {
+                var countryHtmlLeft = '';
+                var countryHtmlRight = '';
+                $.each(countryList, function (key, val) {
+                    countryHtmlLeft += `<option ${val[1] == initialValue[4][1] ? 'selected':''} value="${val[1]}">${val[0]}</option>`;
+                    countryHtmlRight += `<option ${val[1] == initialValue[2][1] ? 'selected':''} value="${val[1]}">${val[0]}</option>`;
+                });
+                $('.selectpicker').each(function (){
+                    if ($(this).data('side') == 'left'){
+                        $(this).html(countryHtmlLeft);
+                        $(this).selectpicker('refresh');
+                    }else{
+                        $(this).html(countryHtmlRight);
+                        $(this).selectpicker('refresh');
+                    }
+                })
+            }
         }
     });
     $(document).ready(function () {
+        $(document).on('click','.check-global',function (e){
+            e.preventDefault();
+            var link = $(this).attr('href');
+            var countryCode1 = [];
+            var countryCode2 = [];
+            $('.selectpicker').each(function (){
+                if($(this).data('side') == 'left'){
+                    countryCode1.push($(this).val())
+                }else{
+                    countryCode2.push($(this).val())
+                }
+            });
+            var data = [{
+                date:getUrlParameter('date',link),
+                keyword:getUrlParameter('keyword',link),
+                countryCode1:countryCode1,
+                countryCode2:countryCode2,
+                date_end:$('#datepicker').val()
+            }];
+            localStorage.setItem('history',JSON.stringify(data));
+            window.location.href = link;
+        })
         $(document).on('change', '#datepicker', function () {
             //SwalInit();
             currentData = moment($(this).val()).format('YYYY-MM-DD');
@@ -355,6 +450,8 @@
             keywordList = ajaxCall(keywordUrl);
             if (keywordList.length > 0) {
                 updateKeywordList(keywordList,newKeyword.toString());
+            }else{
+                $('#keyword-list').html('');
             }
         })
         $(document).on('click', '.key-class', function () {
@@ -545,7 +642,6 @@
                 keywordListHtml += `<li class="key-class `;
                 if (selected !== undefined){
                     var arr = selected.split(",");
-                    //console.log(arr[0])
                     $.each(arr,function (k,v){
                         if (v == val[0]){
                             keywordListHtml +=` active `;
@@ -587,7 +683,21 @@
             scrollLeft: "-=200px"
         }, "slow");
     });
+    var getUrlParameter = function getUrlParameter(sParam,url) {
+        var sPageURL = url,
+            sURLVariables = sPageURL.split('&'),
+            sParameterName,
+            i;
 
+        for (i = 0; i < sURLVariables.length; i++) {
+            sParameterName = sURLVariables[i].split('=');
+
+            if (sParameterName[0] === sParam) {
+                return typeof sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+            }
+        }
+        return false;
+    };
 </script>
 </body>
 </html>
