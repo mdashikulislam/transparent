@@ -570,6 +570,7 @@ span.flag-icon{
   background: transparent;
   padding: 0;
 }
+
 @media only screen and (min-width: 768px) {
   .large-screen{
     display: block;
@@ -592,4 +593,12 @@ span.flag-icon{
   .timeline-right-side-1{
     width: 90%!important;
   }
+}
+.privacy{
+  position: fixed;
+  top: 70%;
+  left: 0;
+}
+.modal{
+  z-index: 9999999;
 }
