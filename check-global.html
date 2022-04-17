@@ -87,6 +87,7 @@
             </div>
         </div>
     </section>
+
 </main>
 
 <script src="assets/dist/js/sweetalert2.min.js"></script>
@@ -139,7 +140,15 @@
             $('.check-global-section-3').html(headerHtml);
             Swal.close();
         } else {
-            window.location.href = 'index.html';
+            $('body main .container').remove();
+            $('body main').append(`<div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-12 col-lg-6">
+                            <p style="text-align: center">Wilkommen auf transpanda.news - der Gegenüberstellung von globalen Nachrichten</p>
+                        </div>
+                    </div>
+                </div>`);
+            Swal.close();
         }
         var countryList = ajaxCall('https://transpanda.news/tpapi/rss_getcountries.cfm');
 
